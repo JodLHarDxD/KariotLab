@@ -1,0 +1,10 @@
+{#- Renders one .person card for contact.html .meet-grid -#}
+{# Inputs: item.slug, item.meta {name, role, location, ex_roles}, item.image_url -#}
+<div class="person">
+  <div class="ph"><img src="{{ item.image_url }}" alt="{{ item.meta.name }}" /></div>
+  <div class="meta">
+    <div class="name">{{ item.meta.name.split(' ', 1)[0] }} <em>{{ item.meta.name.split(' ', 1)[1] if ' ' in item.meta.name else '' }}</em></div>
+    <div class="role">// {{ item.meta.role }}</div>
+    <div class="city">{{ item.meta.location }}{% if item.meta.ex_roles %} · {{ item.meta.ex_roles }}{% endif %}</div>
+  </div>
+</div>
