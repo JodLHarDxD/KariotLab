@@ -7,6 +7,11 @@ def process_image(src: Path, dst: Path, *, max_width: int, quality: int) -> None
     """Resize src to max_width px wide (no upscale), write JPEG to dst.
 
     Skips work when dst already exists and is newer than src.
+
+    Caller invariant: dst path must encode every parameter that affects output
+    (e.g. preset name in the filename). The cache key is mtime only, so a
+    same-path call with different max_width/quality will return stale output.
+    Filesystem mtime resolution caps cache precision (~10ms on NTFS, 2s on FAT32).
     """
     if dst.is_file() and dst.stat().st_mtime_ns >= src.stat().st_mtime_ns:
         return
