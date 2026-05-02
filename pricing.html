@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Pricing — Lumis</title>
+<meta name="description" content="Three depths of system. One brand worth defending. See every feature, side by side." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,300;1,6..72,400;1,6..72,500;1,6..72,600&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+  :root {
+    --ink: #0A0908; --ink-2: #15120F; --ink-3: #221E18;
+    --paper: #F2EBDA; --paper-2: #E8DFC8; --paper-3: #DBCFB1;
+    --signal: #FF4D2E; --signal-soft: #FFB89F; --gold: #C9A467;
+    --rule: rgba(242,235,218,0.12); --rule-2: rgba(242,235,218,0.20);
+    --serif: 'Newsreader', serif; --sans: 'Inter', sans-serif; --mono: 'JetBrains Mono', monospace;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--ink); color: var(--paper); font-family: var(--sans); overflow-x: hidden; cursor: none; }
+  ::selection { background: var(--signal); color: var(--ink); }
+
+  .noise { position: fixed; inset: 0; pointer-events: none; z-index: 100; opacity: 0.05; mix-blend-mode: overlay; }
+  .spotlight { position: fixed; pointer-events: none; z-index: 90; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(255,77,46,0.10) 0%, transparent 70%); transform: translate(-50%,-50%); mix-blend-mode: screen; will-change: transform; }
+  .cursor-dot { position: fixed; pointer-events: none; z-index: 9999; width: 8px; height: 8px; background: var(--signal); border-radius: 50%; transform: translate(-50%,-50%); mix-blend-mode: difference; will-change: transform; }
+  .cursor-ring { position: fixed; pointer-events: none; z-index: 9998; width: 40px; height: 40px; border: 1px solid var(--paper); border-radius: 50%; transform: translate(-50%,-50%); mix-blend-mode: normal; transition: width 0.3s, height 0.3s, border-color 0.3s, box-shadow 0.3s; will-change: transform; }
+  .cursor-dot, .cursor-ring { mix-blend-mode: normal; }
+  .cursor-dot { transition: width 0.25s, height 0.25s, background 0.25s, box-shadow 0.25s; box-shadow: 0 0 0 2px rgba(10,9,8,0.55), 0 0 14px rgba(255,77,46,0.45); }
+  .cursor-ring.on-light { border-color: rgba(10,9,8,0.75); box-shadow: 0 0 0 1px rgba(242,235,218,0.55), 0 0 24px rgba(255,77,46,0.12); }
+  .cursor-ring.on-dark { border-color: rgba(242,235,218,0.88); box-shadow: 0 0 0 1px rgba(10,9,8,0.65), 0 0 24px rgba(255,77,46,0.18); }
+  .cursor-dot.on-light { box-shadow: 0 0 0 2px rgba(242,235,218,0.9), 0 0 12px rgba(255,77,46,0.28); }
+  .cursor-dot.on-dark { box-shadow: 0 0 0 2px rgba(10,9,8,0.7), 0 0 14px rgba(255,77,46,0.55); }
+  .cursor-ring.hover { width: 80px; height: 80px; border-color: var(--signal); box-shadow: 0 0 0 1px rgba(255,77,46,0.35), 0 16px 42px rgba(255,77,46,0.22); }
+  .cursor-dot.hover { width: 10px; height: 10px; }
+
+  @media (prefers-reduced-motion: reduce) { body { cursor: auto; } .spotlight, .cursor-dot, .cursor-ring { display: none; } *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
+  @media (hover: none), (pointer: coarse) { body { cursor: auto; } .spotlight, .cursor-dot, .cursor-ring { display: none; } }
+
+  .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; padding: 20px 32px; display: flex; justify-content: space-between; align-items: center; backdrop-filter: blur(8px); background: linear-gradient(180deg, rgba(10,9,8,0.6), rgba(10,9,8,0)); transition: background 0.3s; border-bottom: 1px solid transparent; }
+  .nav.scrolled { background: rgba(10,9,8,0.85); border-bottom-color: var(--rule); }
+  .nav .mark { font-family: var(--serif); font-size: 22px; font-style: italic; letter-spacing: -0.02em; color: var(--paper); text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+  .nav .mark::before { content:''; width: 8px; height: 8px; background: var(--signal); border-radius: 50%; box-shadow: 0 0 12px var(--signal); animation: pulse 2.4s ease-in-out infinite; }
+  .nav ul { list-style: none; display: flex; gap: 28px; }
+  .nav a.link { color: var(--paper); text-decoration: none; font-size: 13px; opacity: 0.7; position: relative; letter-spacing: 0.04em; transition: opacity 0.3s; }
+  .nav a.link:hover, .nav a.link.active { opacity: 1; }
+  .nav a.link.active::after { content:''; position: absolute; left: 0; bottom: -6px; width: 100%; height: 1px; background: var(--signal); }
+  .btn-primary { font-family: var(--mono); font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink); background: var(--paper); padding: 12px 22px; border-radius: 999px; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.45s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.4s ease; border: 1px solid var(--paper); }
+  .btn-primary:hover { background: var(--signal); color: var(--paper); border-color: var(--signal); transform: translateY(-1px); }
+  a, button, input, textarea, select, summary { touch-action: manipulation; }
+  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible, summary:focus-visible { outline: 2px solid var(--signal); outline-offset: 4px; }
+  .btn-primary, .cta-tier, .toggle button, .tier, .faq { will-change: transform; }
+  .btn-primary:hover, .btn-primary:focus-visible { transform: translateY(-6px) scale(1.04); box-shadow: 0 32px 72px rgba(255,77,46,0.36), 0 10px 28px rgba(255,77,46,0.22); }
+  @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(255,77,46,0.7), 0 0 12px var(--signal); } 70% { box-shadow: 0 0 0 12px rgba(255,77,46,0), 0 0 12px var(--signal); } }
+
+  /* PAGE HEAD */
+  .page-head { padding: 180px 32px 80px; max-width: 1440px; margin: 0 auto; text-align: center; }
+  .page-head .label { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--signal); display: block; margin-bottom: 32px; }
+  .page-head h1 { font-family: var(--serif); font-weight: 300; font-size: clamp(56px, 11vw, 200px); line-height: 0.9; letter-spacing: -0.04em; }
+  .page-head h1 em { font-style: italic; color: var(--signal-soft); }
+  .page-head .deck { margin-top: 40px; max-width: 640px; margin-left: auto; margin-right: auto; font-family: var(--serif); font-style: italic; font-weight: 300; font-size: 22px; line-height: 1.45; opacity: 0.7; }
+
+  /* TOGGLE */
+  .toggle-wrap { display: flex; justify-content: center; padding: 60px 32px 0; }
+  .toggle {
+    display: inline-flex; padding: 6px; border-radius: 999px;
+    background: var(--ink-2); border: 1px solid var(--rule);
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase;
+  }
+  .toggle button {
+    padding: 12px 24px; border-radius: 999px; background: transparent;
+    border: none; color: var(--paper); opacity: 0.6; cursor: pointer; transition: all 0.3s;
+    font: inherit; letter-spacing: inherit;
+  }
+  .toggle button:hover, .toggle button:focus-visible { opacity: 1; transform: translateY(-2px); box-shadow: 0 10px 24px rgba(255,77,46,0.12); }
+  .toggle button.active { background: var(--paper); color: var(--ink); opacity: 1; }
+  .toggle .save { font-size: 10px; color: var(--signal); margin-left: 6px; }
+
+  /* PRICING GRID */
+  .pricing-grid { max-width: 1440px; margin: 60px auto 0; padding: 0 32px; display: grid; grid-template-columns: 1fr 1.15fr 1fr; gap: 24px; }
+  .tier { background: var(--ink-2); border: 1px solid var(--rule); border-radius: 24px; padding: 40px; display: flex; flex-direction: column; gap: 20px; position: relative; overflow: hidden; transition: border-color 0.4s, transform 0.4s, background 0.4s, box-shadow 0.4s; }
+  .tier:hover, .tier:focus-within { border-color: var(--rule-2); transform: translateY(-4px); background: var(--ink-3); }
+  .tier .name { font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper); opacity: 0.7; }
+  .tier .price { font-family: var(--serif); font-weight: 400; font-size: clamp(56px, 6vw, 88px); line-height: 0.95; letter-spacing: -0.04em; }
+  .tier .price .ital { font-style: italic; }
+  .tier .price .unit { font-family: var(--mono); font-size: 14px; opacity: 0.6; letter-spacing: 0.05em; margin-left: 8px; }
+  .tier .desc { font-family: var(--serif); font-style: italic; font-weight: 300; font-size: 18px; line-height: 1.4; opacity: 0.7; }
+  .tier ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .tier li { font-size: 14px; opacity: 0.85; line-height: 1.5; display: grid; grid-template-columns: 16px 1fr; gap: 12px; align-items: baseline; }
+  .tier li .check { color: var(--signal); font-family: var(--serif); font-style: italic; }
+  .tier .cta-tier { margin-top: auto; font-family: var(--mono); font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; padding: 16px 24px; border-radius: 999px; text-align: center; background: transparent; color: var(--paper); border: 1px solid var(--rule-2); text-decoration: none; transition: all 0.3s; cursor: pointer; }
+  .tier .cta-tier:hover, .tier .cta-tier:focus-visible { background: var(--paper); color: var(--ink); border-color: var(--paper); transform: translateY(-3px) scale(1.02); box-shadow: 0 14px 34px rgba(255,77,46,0.18); }
+  .tier.hero-tier { background: linear-gradient(180deg, var(--ink-3) 0%, var(--ink-2) 100%); border-color: var(--signal); transform: translateY(-8px); box-shadow: 0 24px 80px rgba(255,77,46,0.16); }
+  .tier.hero-tier::before { content: ''; position: absolute; inset: -1px; background: linear-gradient(135deg, var(--signal), var(--gold), transparent 60%); border-radius: 24px; z-index: -1; opacity: 0.4; filter: blur(4px); }
+  .tier.hero-tier .badge { position: absolute; top: 24px; right: 24px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink); background: var(--signal); padding: 6px 12px; border-radius: 999px; }
+  .tier.hero-tier .name { color: var(--signal-soft); opacity: 1; }
+  .tier.hero-tier .price .ital { color: var(--signal); }
+  .tier.hero-tier .cta-tier { background: var(--signal); color: var(--paper); border-color: var(--signal); }
+  .tier.hero-tier .cta-tier:hover { background: var(--paper); color: var(--ink); border-color: var(--paper); }
+  .tier.is-active { background: linear-gradient(180deg, var(--ink-3) 0%, var(--ink-2) 100%); border-color: var(--signal); transform: translateY(-10px) scale(1.015); box-shadow: 0 30px 90px rgba(255,77,46,0.22); }
+  .tier.is-active::before { content: ''; position: absolute; inset: -1px; background: linear-gradient(135deg, var(--signal), var(--gold), transparent 60%); border-radius: 24px; z-index: -1; opacity: 0.4; filter: blur(4px); }
+  .tier.is-active .name { color: var(--signal-soft); opacity: 1; }
+  .tier.is-active .price .ital { color: var(--signal); }
+  .tier.is-active .cta-tier { background: var(--signal); color: var(--paper); border-color: var(--signal); }
+  .pricing-grid.has-active .tier.hero-tier:not(.is-active) { border-color: var(--rule-2); background: var(--ink-2); transform: none; box-shadow: none; }
+  .pricing-grid.has-active .tier.hero-tier:not(.is-active)::before { opacity: 0.12; }
+  .pricing-grid.has-active .tier.hero-tier:not(.is-active) .name { color: var(--paper); opacity: 0.7; }
+  .pricing-grid.has-active .tier.hero-tier:not(.is-active) .price .ital { color: inherit; }
+  .pricing-grid.has-active .tier.hero-tier:not(.is-active) .cta-tier { background: transparent; color: var(--paper); border-color: var(--rule-2); }
+
+  /* COMPARE TABLE */
+  .compare-section { max-width: 1440px; margin: 140px auto; padding: 80px 32px; }
+  .compare-section h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(40px, 5vw, 72px); line-height: 1; letter-spacing: -0.025em; margin-bottom: 24px; }
+  .compare-section h2 em { font-style: italic; color: var(--signal-soft); }
+  .compare-section .deck { font-family: var(--serif); font-style: italic; font-weight: 300; font-size: 20px; opacity: 0.6; max-width: 600px; margin-bottom: 60px; }
+  .compare-table { width: 100%; border-collapse: collapse; }
+  .compare-table thead th { font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.6; padding: 24px 16px; text-align: left; border-bottom: 1px solid var(--rule-2); }
+  .compare-table thead th.center { text-align: center; }
+  .compare-table thead th.signal { color: var(--signal); opacity: 1; }
+  .compare-table tbody tr { transition: background 0.3s; }
+  .compare-table tbody tr:hover { background: rgba(242,235,218,0.03); }
+  .compare-table tbody td { padding: 22px 16px; border-bottom: 1px solid var(--rule); font-size: 14px; }
+  .compare-table tbody td.feature { font-family: var(--serif); font-weight: 300; font-size: 18px; opacity: 0.9; max-width: 420px; }
+  .compare-table tbody td.center { text-align: center; }
+  .compare-table tbody td .y { color: var(--signal); font-family: var(--serif); font-style: italic; font-size: 22px; }
+  .compare-table tbody td .n { color: var(--paper); opacity: 0.25; font-family: var(--serif); font-size: 22px; }
+  .compare-table tbody td .v { font-family: var(--mono); opacity: 0.85; }
+  .compare-table tbody .group td { padding-top: 60px; padding-bottom: 16px; border-bottom: 1px solid var(--rule-2); }
+  .compare-table tbody .group td.feature { font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.5; font-weight: 500; }
+
+  /* FAQ */
+  .faq-section { max-width: 1100px; margin: 120px auto; padding: 80px 32px; }
+  .faq-section h2 { font-family: var(--serif); font-weight: 300; font-size: clamp(48px, 7vw, 96px); line-height: 0.95; letter-spacing: -0.03em; margin-bottom: 60px; }
+  .faq-section h2 em { font-style: italic; color: var(--signal); }
+  .faq-list { display: flex; flex-direction: column; }
+  .faq { border-top: 1px solid var(--rule); padding: 28px 0; cursor: pointer; transition: padding 0.4s; }
+  .faq:last-child { border-bottom: 1px solid var(--rule); }
+  .faq:hover, .faq:focus-within { padding-left: 12px; background: rgba(255,77,46,0.035); }
+  .faq summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: baseline; gap: 32px; font-family: var(--serif); font-weight: 400; font-size: clamp(22px, 2vw, 32px); line-height: 1.3; letter-spacing: -0.015em; color: var(--paper); }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary em { font-style: italic; color: var(--signal-soft); }
+  .faq summary .icon { flex-shrink: 0; font-family: var(--serif); font-style: italic; font-size: 32px; color: var(--signal); transition: transform 0.4s; }
+  .faq[open] summary .icon { transform: rotate(45deg); }
+  .faq .answer { padding-top: 20px; padding-right: 64px; font-family: var(--serif); font-weight: 300; font-size: 18px; line-height: 1.55; opacity: 0.78; }
+  .faq .answer em { font-style: italic; color: var(--signal-soft); }
+
+  /* GUARANTEE */
+  .guarantee { max-width: 1440px; margin: 100px auto; padding: 80px 32px; background: var(--paper); color: var(--ink); border-radius: 24px; text-align: center; position: relative; overflow: hidden; }
+  .guarantee::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(255,77,46,0.10), transparent 60%); }
+  .guarantee .stamp { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.6; display: inline-block; margin-bottom: 24px; }
+  .guarantee h3 { font-family: var(--serif); font-weight: 300; font-size: clamp(40px, 6vw, 88px); line-height: 0.95; letter-spacing: -0.03em; position: relative; z-index: 2; }
+  .guarantee h3 em { font-style: italic; color: var(--signal); }
+  .guarantee p { margin-top: 28px; font-family: var(--serif); font-style: italic; font-weight: 300; font-size: 20px; line-height: 1.5; opacity: 0.75; max-width: 640px; margin-left: auto; margin-right: auto; }
+  .guarantee .signature { margin-top: 32px; font-family: var(--serif); font-style: italic; font-size: 24px; }
+  .guarantee .signature .by { display: block; font-family: var(--mono); font-style: normal; font-size: 11px; letter-spacing: 0.2em; opacity: 0.5; text-transform: uppercase; margin-bottom: 4px; }
+
+  /* CTA */
+  .cta-strip { padding: 100px 32px; text-align: center; background: var(--ink); }
+  .cta-strip h2 { font-family: var(--serif); font-weight: 300; font-size: clamp(48px, 8vw, 130px); line-height: 0.95; letter-spacing: -0.04em; }
+  .cta-strip h2 em { font-style: italic; color: var(--signal); }
+  .cta-strip a { margin-top: 40px; display: inline-flex; }
+
+  /* FOOTER */
+  footer { background: var(--ink); color: var(--paper); padding: 80px 32px 32px; border-top: 1px solid var(--rule); }
+  .f-inner { max-width: 1440px; margin: 0 auto; }
+  .f-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; padding-bottom: 40px; border-bottom: 1px solid var(--rule); }
+  .f-grid h4 { font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.5; margin-bottom: 20px; }
+  .f-grid p { font-family: var(--serif); font-style: italic; font-weight: 300; font-size: 16px; line-height: 1.5; opacity: 0.85; max-width: 320px; }
+  .f-grid ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .f-grid a { color: var(--paper); text-decoration: none; opacity: 0.75; font-size: 14px; transition: all 0.2s; }
+  .f-grid a:hover { color: var(--signal); opacity: 1; }
+  .f-bottom { margin-top: 32px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 24px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; opacity: 0.5; text-transform: uppercase; }
+  .f-bottom .ops { display: inline-flex; align-items: center; gap: 10px; opacity: 0.85; }
+  .gdot { width: 8px; height: 8px; border-radius: 50%; background: #4ADE80; box-shadow: 0 0 8px rgba(74,222,128,0.6); animation: gpulse 2s ease-in-out infinite; }
+  @keyframes gpulse { 0%,100% { box-shadow: 0 0 8px rgba(74,222,128,0.6), 0 0 0 0 rgba(74,222,128,0.7); } 50% { box-shadow: 0 0 16px rgba(74,222,128,0.8), 0 0 0 8px rgba(74,222,128,0); } }
+  @media (max-width: 980px) {
+    .pricing-grid { grid-template-columns: 1fr; }
+    .compare-table thead { display: none; }
+    .compare-table tbody td.feature { font-size: 16px; padding: 16px 0 4px; }
+    .compare-table tbody td.center { display: inline-block; padding: 4px 12px 12px; opacity: 0.85; }
+    .compare-table tbody td.center::before { content: attr(data-tier) ': '; opacity: 0.5; font-family: var(--mono); font-size: 10px; letter-spacing: 0.15em; }
+    .f-grid { grid-template-columns: 1fr 1fr; }
+    .nav ul { display: none; }
+  }
+</style>
+</head>
+<body data-cursor-surface="dark">
+
+<svg class="noise" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(#n)"/></svg>
+<div class="spotlight" id="spotlight"></div>
+<div class="cursor-ring" id="ring"></div>
+<div class="cursor-dot" id="dot"></div>
+
+<nav class="nav" id="nav">
+  <a href="index.html" class="mark">Lumis</a>
+  <ul>
+    <li><a class="link" href="index.html">Index</a></li>
+    <li><a class="link" href="work.html">Work</a></li>
+    <li><a class="link" href="manifesto.html">Manifesto</a></li>
+    <li><a class="link" href="journal.html">Journal</a></li>
+    <li><a class="link active" href="pricing.html">Pricing</a></li>
+    <li><a class="link" href="contact.html">Contact</a></li>
+  </ul>
+  <a href="contact.html" class="btn-primary">Start building <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 10L10 2M10 2H4M10 2V8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></a>
+</nav>
+
+<header class="page-head" data-cursor-surface="dark">
+  <span class="label">// 04 / 06 · Pricing</span>
+  <h1>One brand.<br/><em>Three depths</em><br/>of system.</h1>
+  <p class="deck">Every plan starts with a <em>14-day strategic trial</em> &mdash; no card required, full system access. Cancel any time. Own the output, regardless.</p>
+</header>
+
+<div class="toggle-wrap">
+  <div class="toggle">
+    <button class="active" data-cycle="month">Monthly</button>
+    <button data-cycle="year">Annual <span class="save">— save 20%</span></button>
+  </div>
+</div>
+
+<section class="pricing-grid" data-cursor-surface="dark">
+  <div class="tier">
+    <span class="name">Starter</span>
+    <div>
+      <span class="price">$<span class="ital" data-monthly="49" data-yearly="39">49</span><span class="unit">/ mo</span></span>
+      <p class="desc">For solo founders and pre-seed teams. A real foundation, in an afternoon.</p>
+    </div>
+    <ul>
+      <li><span class="check">→</span><span>One full brand system</span></li>
+      <li><span class="check">→</span><span>2 strategic revisions / month</span></li>
+      <li><span class="check">→</span><span>Standard library (24 primitives)</span></li>
+      <li><span class="check">→</span><span>Export: Figma, code, tokens</span></li>
+      <li><span class="check">→</span><span>Email support · 48h response</span></li>
+    </ul>
+    <a href="contact.html" class="cta-tier">Start Starter</a>
+  </div>
+
+  <div class="tier hero-tier">
+    <span class="badge">Most chosen</span>
+    <span class="name">Studio</span>
+    <div>
+      <span class="price">$<span class="ital" data-monthly="249" data-yearly="199">249</span><span class="unit">/ mo</span></span>
+      <p class="desc">For teams shipping product, marketing, and sub-brands. Lumis stays in the room.</p>
+    </div>
+    <ul>
+      <li><span class="check">→</span><span>Everything in Starter, no caps</span></li>
+      <li><span class="check">→</span><span>Unlimited iterations + sub-brands</span></li>
+      <li><span class="check">→</span><span>Living system · continuous</span></li>
+      <li><span class="check">→</span><span>Extended library (120+ primitives)</span></li>
+      <li><span class="check">→</span><span>Async senior creative review</span></li>
+      <li><span class="check">→</span><span>Slack channel · 4h response</span></li>
+    </ul>
+    <a href="contact.html" class="cta-tier">Start Studio</a>
+  </div>
+
+  <div class="tier">
+    <span class="name">Scale</span>
+    <div>
+      <span class="price"><span class="ital">Custom</span></span>
+      <p class="desc">For Series-B+ teams managing brand portfolios across markets, languages, and product lines.</p>
+    </div>
+    <ul>
+      <li><span class="check">→</span><span>Everything in Studio, dedicated</span></li>
+      <li><span class="check">→</span><span>Multi-brand portfolio management</span></li>
+      <li><span class="check">→</span><span>Localization, RTL, multi-market</span></li>
+      <li><span class="check">→</span><span>Custom training on your archive</span></li>
+      <li><span class="check">→</span><span>SSO, audit logs, compliance</span></li>
+      <li><span class="check">→</span><span>Dedicated principal · 1h response</span></li>
+    </ul>
+    <a href="contact.html" class="cta-tier">Talk to a principal</a>
+  </div>
+</section>
+
+<section class="compare-section">
+  <h2>Compare every <em>feature</em>.</h2>
+  <p class="deck">Annoyingly thorough. Use cmd-F to find what matters to you.</p>
+  <table class="compare-table">
+    <thead>
+      <tr>
+        <th>Capability</th>
+        <th class="center">Starter</th>
+        <th class="center signal">Studio</th>
+        <th class="center">Scale</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="group"><td class="feature" colspan="4">// Strategy</td></tr>
+      <tr><td class="feature">Brand strategy passes</td><td class="center" data-tier="Starter"><span class="v">100/mo</span></td><td class="center" data-tier="Studio"><span class="v">Unlimited</span></td><td class="center" data-tier="Scale"><span class="v">Unlimited</span></td></tr>
+      <tr><td class="feature">Positioning matrices</td><td class="center" data-tier="Starter"><span class="y">✓</span></td><td class="center" data-tier="Studio"><span class="y">✓</span></td><td class="center" data-tier="Scale"><span class="y">✓</span></td></tr>
+      <tr><td class="feature">Audience research synthesis</td><td class="center" data-tier="Starter"><span class="n">—</span></td><td class="center" data-tier="Studio"><span class="y">✓</span></td><td class="center" data-tier="Scale"><span class="y">✓ Custom</span></td></tr>
+      <tr><td class="feature">Competitive territory mapping</td><td class="center" data-tier="Starter"><span class="n">—</span></td><td class="center" data-tier="Studio"><span class="y">✓</span></td><td class="center" data-tier="Scale"><span class="y">✓</span></td></tr>
+
+      <tr class="group"><td class="feature" colspan="4">// Identity</td></tr>
+      <tr><td class="feature">Wordmark + logo system</td><td class="center" data-tier="Starter"><span class="y">✓</span></td><td class="center" data-tier="Studio"><span class="y">✓</span></td><td class="center" data-tier="Scale"><span class="y">✓</span></td></tr>
+      <tr><td class="feature">Color system (semantic + scales)</td><td class="center" data-tier="Starter"><span class="y">✓</span></td><td class="center" data-tier="Studio"><span class="y">✓</span></td><td class="center" data-tier="Scale"><span class="y">✓</span></td></tr>
+      <tr><td class="feature">Typographic system (full scale)</td><td class="center" data-tier="Starter"><span class="y">✓</span></td><td class="center" data-tier="Studio"><span class="y">✓</span></td><td class="center" data-tier="Scale"><span class="y">✓ Custom</span></td></tr>
+      <tr><td class="feature">Motion primitives</td><td class="center" data-tier="Starter"><span class="n">—</span></td><td class="center" data-tier="Studio"><span class="y">✓</span></td><td class="center" data-tier="Scale"><span class="y">✓</span></td></tr>
+      <tr><td class="feature">3D + photographic direction</td><td class="center" data-tier="Starter"><span class="n">—</span></td><td class="center" data-tier="Studio"><span class="y">✓</span></td><td class="center" data-tier="Scale"><span class="y">✓</span></td></tr>
+
+      <tr class="group"><td class="feature" colspan="4">// Voice + content</td></tr>
+      <tr><td class="feature">Voice rules + tone matrix</td><td class="center" data-tier="Starter"><span class="y">✓</span></td><td class="center" data-tier="Studio"><span class="y">✓</span></td><td class="center" data-tier="Scale"><span class="y">✓</span></td></tr>
+      <tr><td class="feature">Naming + nomenclature</td><td class="center" data-tier="Starter"><span class="n">—</span></td><td class="center" data-tier="Studio"><span class="y">✓</span></td><td class="center" data-tier="Scale"><span class="y">✓</span></td></tr>
+      <tr><td class="feature">Long-form copy generation</td><td class="center" data-tier="Starter"><span class="n">—</span></td><td class="center" data-tier="Studio"><span class="y">✓</span></td><td class="center" data-tier="Scale"><span class="y">✓ Custom</span></td></tr>
+
+      <tr class="group"><td class="feature" colspan="4">// Living system</td></tr>
+      <tr><td class="feature">Continuous brand updates</td><td class="center" data-tier="Starter"><span class="n">—</span></td><td class="center" data-tier="Studio"><span class="y">✓</span></td><td class="center" data-tier="Scale"><span class="y">✓</span></td></tr>
+      <tr><td class="feature">Sub-brand management</td><td class="center" data-tier="Starter"><span class="n">—</span></td><td class="center" data-tier="Studio"><span class="v">Up to 4</span></td><td class="center" data-tier="Scale"><span class="v">Unlimited</span></td></tr>
+      <tr><td class="feature">Version history + rollback</td><td class="center" data-tier="Starter"><span class="v">90 days</span></td><td class="center" data-tier="Studio"><span class="v">2 years</span></td><td class="center" data-tier="Scale"><span class="v">Forever</span></td></tr>
+      <tr><td class="feature">Multi-market localization</td><td class="center" data-tier="Starter"><span class="n">—</span></td><td class="center" data-tier="Studio"><span class="n">—</span></td><td class="center" data-tier="Scale"><span class="y">✓</span></td></tr>
+
+      <tr class="group"><td class="feature" colspan="4">// Export + integration</td></tr>
+      <tr><td class="feature">Figma library + tokens</td><td class="center" data-tier="Starter"><span class="y">✓</span></td><td class="center" data-tier="Studio"><span class="y">✓</span></td><td class="center" data-tier="Scale"><span class="y">✓</span></td></tr>
+      <tr><td class="feature">CSS / Tailwind / shadcn export</td><td class="center" data-tier="Starter"><span class="y">✓</span></td><td class="center" data-tier="Studio"><span class="y">✓</span></td><td class="center" data-tier="Scale"><span class="y">✓</span></td></tr>
+      <tr><td class="feature">W3C design tokens</td><td class="center" data-tier="Starter"><span class="y">✓</span></td><td class="center" data-tier="Studio"><span class="y">✓</span></td><td class="center" data-tier="Scale"><span class="y">✓</span></td></tr>
+      <tr><td class="feature">Custom integrations + API</td><td class="center" data-tier="Starter"><span class="n">—</span></td><td class="center" data-tier="Studio"><span class="n">—</span></td><td class="center" data-tier="Scale"><span class="y">✓</span></td></tr>
+
+      <tr class="group"><td class="feature" colspan="4">// Support</td></tr>
+      <tr><td class="feature">Response time</td><td class="center" data-tier="Starter"><span class="v">48h</span></td><td class="center" data-tier="Studio"><span class="v">4h</span></td><td class="center" data-tier="Scale"><span class="v">1h</span></td></tr>
+      <tr><td class="feature">Senior creative review</td><td class="center" data-tier="Starter"><span class="n">—</span></td><td class="center" data-tier="Studio"><span class="v">Async</span></td><td class="center" data-tier="Scale"><span class="v">Live, 1:1</span></td></tr>
+      <tr><td class="feature">Dedicated principal</td><td class="center" data-tier="Starter"><span class="n">—</span></td><td class="center" data-tier="Studio"><span class="n">—</span></td><td class="center" data-tier="Scale"><span class="y">✓</span></td></tr>
+      <tr><td class="feature">SSO, audit, compliance</td><td class="center" data-tier="Starter"><span class="n">—</span></td><td class="center" data-tier="Studio"><span class="n">—</span></td><td class="center" data-tier="Scale"><span class="y">✓</span></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="guarantee" data-cursor-surface="light">
+  <span class="stamp">// The studio guarantee</span>
+  <h3>If your <em>brand</em> doesn't argue for itself,<br/>your <em>money</em> shouldn't argue for ours.</h3>
+  <p>14 days. Full system access. No card. If by day 14 you don't have a brand you can defend in a board meeting, we don't keep your money. We keep working until you do, or you walk free.</p>
+  <div class="signature">
+    <span class="by">— Signed at the studio door</span>
+    <em>Lumis Studio</em>
+  </div>
+</section>
+
+<section class="faq-section">
+  <h2>Questions, <em>annotated</em>.</h2>
+  <div class="faq-list">
+    <details class="faq" open>
+      <summary>How is this different from <em>hiring an agency?</em><span class="icon">+</span></summary>
+      <div class="answer">An agency takes 3&ndash;6 months and costs $80k&ndash;$300k+ per cycle, then disappears. Lumis takes hours, costs $49&ndash;$249/mo, and stays with your brand as it evolves. The work is informed by the same award archive senior agency creatives reference &mdash; the difference is that <em>you stay in the room</em> for every decision.</div>
+    </details>
+    <details class="faq">
+      <summary>Do I <em>own</em> the output?<span class="icon">+</span></summary>
+      <div class="answer">Yes, fully. Every wordmark, palette, type spec, voice rule, and asset Lumis generates is yours, free and clear, exportable in W3C design tokens, Figma, code, or print-ready. Cancel any time, take everything with you.</div>
+    </details>
+    <details class="faq">
+      <summary>What does <em>"living system"</em> actually mean?<span class="icon">+</span></summary>
+      <div class="answer">Your brand isn't frozen at launch. As you raise, pivot, hire, or expand, Lumis recommends thoughtful updates &mdash; with provenance, versioning, and equity carried forward. You approve every change. Roll back anything. Watch the system learn alongside the company.</div>
+    </details>
+    <details class="faq">
+      <summary>What if my brand is <em>already established?</em><span class="icon">+</span></summary>
+      <div class="answer">Scale plan includes <em>custom training</em> on your existing brand archive &mdash; we encode what already works, then help you evolve it without breaking equity. Many of our most loved cases are not first-time brand builds; they are renovations done with respect.</div>
+    </details>
+    <details class="faq">
+      <summary>Can I see <em>real work</em> done with Lumis?<span class="icon">+</span></summary>
+      <div class="answer">142 systems shipped to date, archived in <a href="work.html" style="color:var(--signal);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px;">/work</a>. North Capital, Atelier Vesta, Casa Lume, Field Notes, Selected, Hum, Brick, Slow, Vesper, Seed &mdash; every system live, evolving, and signed.</div>
+    </details>
+    <details class="faq">
+      <summary>What if I'm <em>not technical?</em><span class="icon">+</span></summary>
+      <div class="answer">Most of our founders aren't. Lumis speaks plain language, asks the right questions, and produces a system you can hand to a developer or designer who is &mdash; or use directly through our Figma + code exports.</div>
+    </details>
+    <details class="faq">
+      <summary>What happens if I <em>cancel?</em><span class="icon">+</span></summary>
+      <div class="answer">Cancel any time. Your brand system is yours forever &mdash; we never claw back assets. You lose access to <em>continuous updates</em> and the living system tools, but everything you've already exported stays usable. Re-subscribe and we pick up where we stopped.</div>
+    </details>
+    <details class="faq">
+      <summary>Do you work with <em>agencies</em> or <em>internal teams?</em><span class="icon">+</span></summary>
+      <div class="answer">Yes, both. Several Series-B teams use Lumis as their internal brand operating system, run by their existing in-house designers. Several agencies use Lumis to do strategic exploration faster, then layer their own craft on top. The Scale plan supports either workflow.</div>
+    </details>
+  </div>
+</section>
+
+<section class="cta-strip" data-cursor-surface="dark">
+  <h2>14 days. <em>No card.</em><br/>Full <em>system access.</em></h2>
+  <a href="contact.html" class="btn-primary">Start building your brand <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 10L10 2M10 2H4M10 2V8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></a>
+</section>
+
+<footer>
+  <div class="f-inner">
+    <div class="f-grid">
+      <div class="col"><h4>// The studio</h4><p>Creative intelligence for the next generation of founders.</p></div>
+      <div class="col"><h4>Product</h4><ul><li><a href="index.html">Index</a></li><li><a href="work.html">Work</a></li><li><a href="pricing.html">Pricing</a></li></ul></div>
+      <div class="col"><h4>Studio</h4><ul><li><a href="contact.html">Contact</a></li><li><a href="manifesto.html">Manifesto</a></li><li><a href="journal.html">Journal</a></li><li><a href="mailto:jodl.hrs03@gmail.com?subject=Lumis%20press%20request">Press</a></li></ul></div>
+      <div class="col"><h4>Elsewhere</h4><ul><li><a href="https://x.com/har_ddy" target="_blank" rel="noopener">X</a></li><li><a href="https://www.instagram.com/jodlxhrs_/" target="_blank" rel="noopener">Instagram</a></li><li><a href="https://github.com/JodLHarDxD" target="_blank" rel="noopener">GitHub</a></li><li><a href="https://www.linkedin.com/in/hriddhish-ranjan-sarkar/" target="_blank" rel="noopener">LinkedIn</a></li><li><a href="https://www.youtube.com/@JodLHrs" target="_blank" rel="noopener">YouTube</a></li></ul></div>
+    </div>
+    <div class="f-bottom">
+      <span>© 2026 Lumis Studio</span>
+      <span class="ops"><span class="gdot"></span>System operational · 99.99%</span>
+      <span>v4.0.7</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+(() => {
+  if (reduced || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+  const sp = document.getElementById('spotlight'), dot = document.getElementById('dot'), ring = document.getElementById('ring');
+  if (!dot || !ring) return;
+  let mx = innerWidth/2, my = innerHeight/2, rx = mx, ry = my, sx = mx, sy = my;
+  addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; dot.style.transform = `translate(${mx}px,${my}px) translate(-50%,-50%)`; });
+  (function loop() { rx += (mx-rx)*0.18; ry += (my-ry)*0.18; sx += (mx-sx)*0.08; sy += (my-sy)*0.08; ring.style.transform = `translate(${rx}px,${ry}px) translate(-50%,-50%)`; if (sp) sp.style.transform = `translate(${sx}px,${sy}px) translate(-50%,-50%)`; requestAnimationFrame(loop); })();
+  const targets = 'a, button, input, textarea, select, summary, [role="button"], .btn-primary, .btn-ghost, .cta-tier, .tier, .case, .feature, .principle, .person, .soc, .pill, .faq, .compare-table tbody tr, .palette .sw, .surf, .article, .filter-bar .f, .toggle button, .form-card';
+  let hd = 0;
+  const setHov = on => { ring.classList.toggle('hover', on); dot.classList.toggle('hover', on); };
+  document.querySelectorAll(targets).forEach(el => {
+    el.addEventListener('mouseenter', () => { hd++; setHov(true); });
+    el.addEventListener('mouseleave', () => { hd = Math.max(0, hd - 1); setHov(hd > 0); });
+  });
+  const surfaceFrom = el => {
+    const hint = el?.closest?.('[data-cursor-surface]')?.dataset.cursorSurface;
+    if (hint) return hint === 'light' ? 'light' : 'dark';
+    for (let n = el; n && n !== document.documentElement; n = n.parentElement) {
+      const m = getComputedStyle(n).backgroundColor.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/);
+      if (!m) continue;
+      if ((m[4] === undefined ? 1 : +m[4]) <= 0.05) continue;
+      return (+m[1]*299 + +m[2]*587 + +m[3]*114) / 1000 > 150 ? 'light' : 'dark';
+    }
+    return document.body.dataset.cursorSurface || 'dark';
+  };
+  const paint = s => { const l = s === 'light'; ring.classList.toggle('on-light', l); ring.classList.toggle('on-dark', !l); dot.classList.toggle('on-light', l); dot.classList.toggle('on-dark', !l); };
+  addEventListener('mousemove', e => paint(surfaceFrom(document.elementFromPoint(e.clientX, e.clientY))), { passive: true });
+  paint(document.body.dataset.cursorSurface || 'dark');
+})();
+
+document.querySelectorAll('.pricing-grid').forEach(grid => {
+  const tiers = [...grid.querySelectorAll('.tier')];
+  const hero = grid.querySelector('.hero-tier');
+  const reset = () => {
+    grid.classList.remove('has-active');
+    tiers.forEach(t => {
+      t.classList.remove('is-active');
+      gsap.to(t, { y: t === hero ? -8 : 0, scale: 1, opacity: 1, duration: 0.55, ease: 'expo.out', overwrite: 'auto' });
+    });
+  };
+  tiers.forEach(tier => {
+    const activate = () => {
+      grid.classList.add('has-active');
+      tiers.forEach(t => {
+        t.classList.toggle('is-active', t === tier);
+        gsap.to(t, t === tier
+          ? { y: -14, scale: 1.025, opacity: 1, duration: 0.55, ease: 'expo.out', overwrite: 'auto' }
+          : { y: 5, scale: 0.972, opacity: 0.68, duration: 0.4, ease: 'power2.out', overwrite: 'auto' });
+      });
+    };
+    tier.addEventListener('mouseenter', activate);
+    tier.addEventListener('focusin', activate);
+    tier.addEventListener('mouseleave', reset);
+    tier.addEventListener('focusout', e => { if (!tier.contains(e.relatedTarget)) reset(); });
+  });
+});
+
+addEventListener('scroll', () => document.getElementById('nav').classList.toggle('scrolled', scrollY > 40), { passive: true });
+
+/* Toggle pricing */
+const buttons = document.querySelectorAll('.toggle button');
+const prices = document.querySelectorAll('[data-monthly]');
+buttons.forEach(b => b.addEventListener('click', () => {
+  buttons.forEach(x => x.classList.remove('active'));
+  b.classList.add('active');
+  const cycle = b.dataset.cycle;
+  prices.forEach(p => {
+    const target = cycle === 'year' ? p.dataset.yearly : p.dataset.monthly;
+    gsap.to(p, { y: -8, opacity: 0, duration: 0.2, onComplete: () => {
+      p.textContent = target;
+      gsap.fromTo(p, { y: 8, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: 'expo.out' });
+    }});
+  });
+}));
+
+/* Page entrance */
+gsap.from('.page-head .label', { opacity: 0, y: 20, duration: 1, ease: 'expo.out' });
+gsap.from('.page-head h1', { opacity: 0, y: 60, duration: 1.6, ease: 'expo.out', delay: 0.2 });
+gsap.from('.page-head .deck', { opacity: 0, y: 30, duration: 1.4, ease: 'expo.out', delay: 0.5 });
+gsap.from('.toggle', { opacity: 0, y: 20, duration: 1, ease: 'expo.out', delay: 0.7 });
+
+gsap.utils.toArray('.tier, .compare-section, .faq, .guarantee, .cta-strip h2').forEach(el => {
+  gsap.fromTo(el, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 1.1, ease: 'expo.out', clearProps: 'transform', scrollTrigger: { trigger: el, start: 'top 85%' } });
+});
+
+/* Compare table row stagger */
+ScrollTrigger.create({
+  trigger: '.compare-table',
+  start: 'top 70%',
+  onEnter: () => gsap.fromTo('.compare-table tr', { opacity: 0, y: 12 }, { opacity: 1, y: 0, stagger: 0.025, duration: 0.6, ease: 'power2.out' })
+});
+</script>
+<script>
+/* signal-arrow cursor */
+(() => {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches || !matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+  ['spotlight','ring','dot'].forEach(id => { const el = document.getElementById(id); if (el) el.style.display = 'none'; });
+  const st = document.createElement('style');
+  st.textContent = `body,a,button,input,textarea,select{cursor:none!important}#cc{position:fixed;top:0;left:0;pointer-events:none;z-index:10000;will-change:transform}#cc-arrow{display:block;fill:var(--paper);filter:drop-shadow(0 1px 4px rgba(0,0,0,.5));transition:fill .2s,filter .3s,transform .35s;transform-origin:2px 2px}#cc.on-light #cc-arrow{fill:var(--ink);filter:drop-shadow(0 1px 2px rgba(0,0,0,.12))}#cc.hover #cc-arrow{transform:scale(1.12);filter:drop-shadow(0 0 10px rgba(255,77,46,.65)) drop-shadow(0 1px 4px rgba(0,0,0,.4))}#cc-orbit{position:absolute;width:0;height:0;top:1px;left:1px;animation:cc-spin 2s linear infinite}#cc-orbit::after{content:'';position:absolute;width:5px;height:5px;border-radius:50%;background:#FF4D2E;top:-2.5px;left:13px;box-shadow:0 0 6px rgba(255,77,46,.9),0 0 14px rgba(255,77,46,.5)}#cc.hover #cc-orbit{animation-duration:.65s}@keyframes cc-spin{to{transform:rotate(360deg)}}`;
+  document.head.appendChild(st);
+  const cc = document.createElement('div');
+  cc.id = 'cc';
+  cc.innerHTML = '<svg id="cc-arrow" width="13" height="19" viewBox="0 0 13 19" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M0 0 L0 15 L4 11 L7 18 L9 17 L6 10 L12 10 Z"/></svg><div id="cc-orbit"></div>';
+  document.body.appendChild(cc);
+  let mx = innerWidth/2, my = innerHeight/2, cx = mx, cy = my;
+  addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  (function loop() { cx += (mx-cx)*.22; cy += (my-cy)*.22; cc.style.transform = `translate(${cx.toFixed(1)}px,${cy.toFixed(1)}px)`; requestAnimationFrame(loop); })();
+  let hd = 0;
+  document.querySelectorAll('a,button,input,textarea,select,summary,[role=button],.btn-primary,.btn-ghost,.cta-tier,.tier,.case,.feature,.principle,.person,.soc,.pill,.faq,.article,.form-card').forEach(el => {
+    el.addEventListener('mouseenter', () => { if (++hd===1) cc.classList.add('hover'); });
+    el.addEventListener('mouseleave', () => { if (!--hd) cc.classList.remove('hover'); });
+  });
+  const sfrom = el => {
+    const h = el?.closest?.('[data-cursor-surface]')?.dataset.cursorSurface;
+    if (h) return h;
+    for (let n = el; n && n !== document.documentElement; n = n.parentElement) {
+      const m = getComputedStyle(n).backgroundColor.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/);
+      if (!m || (+m[4]||1) <= .05) continue;
+      return (+m[1]*299 + +m[2]*587 + +m[3]*114)/1e3 > 150 ? 'light' : 'dark';
+    }
+    return document.body.dataset.cursorSurface || 'dark';
+  };
+  addEventListener('mousemove', e => cc.classList.toggle('on-light', sfrom(document.elementFromPoint(e.clientX, e.clientY)) === 'light'), { passive: true });
+})();
+</script>
+</body>
+</html>
