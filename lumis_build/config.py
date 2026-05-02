@@ -14,7 +14,9 @@ SECTIONS = [
     ("pricing.html",  "pricing-tiers", "services", "pricing_tier.html.j2"),
 ]
 
-# (subdir, max_width, jpeg_quality)
+# Per-content-type image processing rules. Dict key is the content subdir
+# (matching SECTIONS[*][2]). Tuple is (output_filename_stem, max_width_px, jpeg_quality).
+# "services" is intentionally absent — pricing tiers have no images.
 IMAGE_PRESETS = {
     "members":  ("portrait", 800,  85),
     "work":     ("cover",    1600, 82),
