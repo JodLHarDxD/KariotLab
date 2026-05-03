@@ -1,0 +1,16 @@
+{#- Inputs: item.slug, item.meta {title, category, date_display, read_time, author, author_img}, item.image_url -#}
+<a href="journal/{{ item.slug }}.html" class="article">
+  <div class="ph"><img src="{{ item.image_url }}" alt="{{ item.meta.title }}" loading="lazy" /></div>
+  <div class="meta">
+    <span class="cat">{{ item.meta.category }}</span>
+    <span class="dot">·</span>
+    <span class="date">{{ item.meta.date_display }}</span>
+    <span class="dot">·</span>
+    <span class="read">{{ item.meta.read_time }} min read</span>
+  </div>
+  <h3>{{ item.meta.title }}</h3>
+  <div class="byline">
+    <div class="ava"><img src="{{ item.author_img_url }}" alt="{{ item.meta.author }}" /></div>
+    <span>{{ item.meta.author }}</span>
+  </div>
+</a>

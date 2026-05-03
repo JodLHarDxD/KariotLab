@@ -1,0 +1,12 @@
+{#- Inputs: item.slug, item.meta {title, title_em, brief, badge, case_num, year, filter, tags[]}, item.image_url -#}
+<a href="case-study.html?slug={{ item.slug }}" class="case" data-f="{{ item.meta.filter }}">
+  <div class="ph">
+    <img src="{{ item.image_url }}" alt="{{ item.meta.title }}{% if item.meta.title_em %} — {{ item.meta.title_em }}{% endif %}" />
+    <div class="vignette"></div>
+    <div class="stamp"><span class="badge">{{ item.meta.badge }}</span></div>
+  </div>
+  <div class="meta-row"><span class="num">// case {{ item.meta.case_num }}</span><span class="year">{{ item.meta.year }}</span></div>
+  <h3>{{ item.meta.title.split(' ', 1)[0] }} <em>{{ item.meta.title.split(' ', 1)[1] if ' ' in item.meta.title else '' }}</em>{% if item.meta.title_em %} — {{ item.meta.title_em }}{% endif %}</h3>
+  <p class="brief">{{ item.meta.brief }}</p>
+  <div class="tagline">{% for t in item.meta.tags %}<span class="t">{{ t }}</span>{% endfor %}</div>
+</a>

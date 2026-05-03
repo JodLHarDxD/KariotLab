@@ -1,0 +1,17 @@
+{#- Inputs: item.meta {name, price, price_unit, desc, bullets[], cta_label, hero (bool), badge?} -#}
+<div class="tier{% if item.meta.hero %} hero-tier{% endif %} reveal">
+  {%- if item.meta.badge %}
+  <span class="badge">{{ item.meta.badge }}</span>
+  {%- endif %}
+  <span class="name">{{ item.meta.name }}</span>
+  <div>
+    <span class="price">{% if item.meta.price_prefix %}{{ item.meta.price_prefix }}{% endif %}<span class="ital">{{ item.meta.price }}</span>{% if item.meta.price_unit %}<span class="unit">{{ item.meta.price_unit }}</span>{% endif %}</span>
+    <p class="desc">{{ item.meta.desc }}</p>
+  </div>
+  <ul>
+    {%- for b in item.meta.bullets %}
+    <li><span class="check">→</span><span>{{ b }}</span></li>
+    {%- endfor %}
+  </ul>
+  <a href="contact.html" class="cta-tier">{{ item.meta.cta_label }}</a>
+</div>
