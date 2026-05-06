@@ -1,0 +1,19 @@
+name: Studio
+price_prefix: $
+price: 249
+price_unit: / mo
+desc: For teams shipping product, marketing, and sub-brands. Lumis stays in the room.
+bullets:
+- Everything in Starter, no caps
+- Unlimited iterations + sub-brands
+- Living system · continuous
+- Extended library (120+ primitives)
+- Async senior creative review
+- Slack channel · 4h response
+cta_label: Start Studio
+hero: true
+badge: Most chosen
+order: 2
+price_data:
+  monthly: 249
+  yearly: 199

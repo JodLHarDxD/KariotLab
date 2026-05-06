@@ -5,7 +5,7 @@
   {%- endif %}
   <span class="name">{{ item.meta.name }}</span>
   <div>
-    <span class="price">{% if item.meta.price_prefix %}{{ item.meta.price_prefix }}{% endif %}<span class="ital">{{ item.meta.price }}</span>{% if item.meta.price_unit %}<span class="unit">{{ item.meta.price_unit }}</span>{% endif %}</span>
+    <span class="price">{% if item.meta.price_prefix %}{{ item.meta.price_prefix }}{% endif %}<span class="ital"{% if item.meta.price_data %} data-monthly="{{ item.meta.price_data.monthly }}" data-yearly="{{ item.meta.price_data.yearly }}"{% endif %}>{{ item.meta.price }}</span>{% if item.meta.price_unit %}<span class="unit">{{ item.meta.price_unit }}</span>{% endif %}</span>
     <p class="desc">{{ item.meta.desc }}</p>
   </div>
   <ul>

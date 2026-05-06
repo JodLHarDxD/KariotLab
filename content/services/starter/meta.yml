@@ -1,0 +1,18 @@
+name: Starter
+price_prefix: $
+price: 49
+price_unit: / mo
+desc: For solo founders and pre-seed teams. A real foundation, in an afternoon.
+bullets:
+- One full brand system
+- 2 strategic revisions / month
+- Standard library (24 primitives)
+- 'Export: Figma, code, tokens'
+- Email support · 48h response
+cta_label: Start Starter
+hero: false
+badge: null
+order: 1
+price_data:
+  monthly: 49
+  yearly: 39

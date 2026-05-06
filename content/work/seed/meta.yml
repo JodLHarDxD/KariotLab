@@ -1,0 +1,17 @@
+title: Seed
+title_em: primary care, replanted.
+brief: Series A · Identity · Patient app · In-clinic surfaces
+badges:
+- text: Health · Service
+  cls: null
+case_num: '10'
+year: 2025
+year_label: null
+filter: health
+size: null
+tags:
+- Health
+- Service
+- Multi-surface
+order: 10
+badge: Health · Service

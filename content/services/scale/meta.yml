@@ -1,0 +1,17 @@
+name: Scale
+price_prefix: ''
+price: Custom
+price_unit: ''
+desc: For Series-B+ teams managing brand portfolios across markets, languages, and
+  product lines.
+bullets:
+- Everything in Studio, dedicated
+- Multi-brand portfolio management
+- Localization, RTL, multi-market
+- Custom training on your archive
+- SSO, audit logs, compliance
+- Dedicated principal · 1h response
+cta_label: Talk to a principal
+hero: false
+badge: null
+order: 3
