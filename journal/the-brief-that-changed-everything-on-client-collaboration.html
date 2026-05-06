@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>The brief that changed everything: on client collaboration — Lumis Journal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,700;1,6..72,300;1,6..72,400;1,6..72,700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<style>
+  :root {
+    --ink: #0A0908; --ink-2: #15120F;
+    --paper: #F2EBDA; --paper-2: #E8DFC8;
+    --signal: #FF4D2E; --signal-soft: #FFB89F; --gold: #C9A467;
+    --rule: rgba(242,235,218,0.12); --rule-2: rgba(242,235,218,0.20);
+    --serif: 'Newsreader', serif; --sans: 'Inter', sans-serif; --mono: 'JetBrains Mono', monospace;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--ink); color: var(--paper); font-family: var(--sans); overflow-x: hidden; }
+  ::selection { background: var(--signal); color: var(--ink); }
+  a, button { touch-action: manipulation; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--signal); outline-offset: 4px; }
+
+  .progress-bar { position: fixed; top: 0; left: 0; height: 2px; background: var(--signal); z-index: 200; transform-origin: left; transform: scaleX(0); }
+
+  /* NAV */
+  .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; padding: 20px 32px; display: flex; justify-content: space-between; align-items: center; backdrop-filter: blur(8px); background: linear-gradient(180deg, rgba(10,9,8,0.6) 0%, rgba(10,9,8,0) 100%); border-bottom: 1px solid transparent; transition: border-color 0.3s, background 0.3s; }
+  .nav.scrolled { background: rgba(10,9,8,0.85); border-bottom-color: var(--rule); }
+  .nav .mark { font-family: var(--serif); font-size: 22px; font-style: italic; letter-spacing: -0.02em; color: var(--paper); text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+  .nav .mark::before { content: ''; width: 8px; height: 8px; background: var(--signal); border-radius: 50%; box-shadow: 0 0 12px var(--signal); animation: pulse 2.4s ease-in-out infinite; }
+  .nav ul { list-style: none; display: flex; gap: 28px; }
+  .nav a.link { color: var(--paper); text-decoration: none; font-size: 13px; opacity: 0.7; transition: opacity 0.3s; position: relative; letter-spacing: 0.04em; }
+  .nav a.link:hover, .nav a.link.active { opacity: 1; }
+  .nav a.link.active::after { content: ''; position: absolute; left: 0; bottom: -6px; width: 100%; height: 1px; background: var(--signal); }
+  .btn-primary { font-family: var(--mono); font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink); background: var(--paper); padding: 12px 22px; border-radius: 999px; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; transition: all 0.25s; border: 1px solid var(--paper); }
+  .btn-primary:hover { background: var(--signal); color: var(--paper); border-color: var(--signal); }
+  @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(255,77,46,0.7), 0 0 12px var(--signal); } 70% { box-shadow: 0 0 0 12px rgba(255,77,46,0), 0 0 12px var(--signal); } }
+
+  /* ARTICLE HEADER */
+  .article-header { padding: 160px 32px 0; max-width: 1440px; margin: 0 auto; }
+  .breadcrumb { display: flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.5; margin-bottom: 56px; }
+  .breadcrumb a { color: var(--paper); text-decoration: none; transition: opacity 0.3s; }
+  .breadcrumb a:hover { opacity: 1; }
+  .breadcrumb .sep { opacity: 0.4; }
+  .breadcrumb .cat { color: var(--signal); opacity: 1; }
+
+  .meta-row { display: flex; align-items: center; gap: 16px; margin-bottom: 36px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.45; }
+  .meta-row .badge { color: var(--signal); border: 1px solid rgba(255,77,46,0.35); padding: 5px 12px; border-radius: 999px; opacity: 1; font-size: 10px; }
+  .meta-row .dot { width: 3px; height: 3px; background: currentColor; border-radius: 50%; opacity: 0.4; }
+
+  .article-header h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(44px, 6vw, 96px); line-height: 0.95; letter-spacing: -0.04em; max-width: 1000px; }
+  .article-header h1 em { font-style: italic; color: var(--signal-soft); }
+
+  .author-bar { display: flex; align-items: center; justify-content: space-between; margin-top: 56px; padding: 28px 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); flex-wrap: wrap; gap: 20px; }
+  .author { display: flex; align-items: center; gap: 14px; }
+  .author .avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--ink-2); border: 1px solid var(--rule-2); overflow: hidden; }
+  .author .avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .author .name { font-size: 14px; font-weight: 500; }
+  .author .role { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.45; margin-top: 3px; }
+  .back-link { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--paper); text-decoration: none; border: 1px solid var(--rule-2); padding: 8px 16px; border-radius: 999px; opacity: 0.65; transition: all 0.3s; }
+  .back-link:hover { opacity: 1; border-color: var(--paper); }
+
+  /* HERO IMAGE */
+  .hero-img { max-width: 1440px; margin: 56px auto 0; padding: 0 32px; }
+  .hero-img figure { border-radius: 24px; overflow: hidden; border: 1px solid var(--rule); }
+  .hero-img figure img { width: 100%; aspect-ratio: 21/9; object-fit: cover; display: block; filter: saturate(0.8) brightness(0.9); }
+
+  /* ARTICLE BODY */
+  .article-body { max-width: 1440px; margin: 0 auto; padding: 80px 32px 120px; display: grid; grid-template-columns: 1fr 680px 1fr; gap: 0 48px; }
+  .article-body .prose p { font-family: var(--serif); font-weight: 300; font-size: clamp(18px, 1.4vw, 22px); line-height: 1.65; opacity: 0.85; margin-bottom: 28px; }
+  .article-body .prose p em { font-style: italic; color: var(--signal-soft); opacity: 1; }
+  .article-body .prose h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(26px, 2.6vw, 40px); line-height: 1.1; letter-spacing: -0.025em; margin: 64px 0 24px; }
+  .article-body .prose h2 em { font-style: italic; color: var(--signal-soft); }
+  .article-body .prose h3 { font-family: var(--serif); font-weight: 400; font-size: clamp(20px, 1.8vw, 28px); line-height: 1.2; letter-spacing: -0.015em; margin: 48px 0 16px; }
+  .article-body .prose blockquote { border-left: 3px solid var(--signal); padding-left: 32px; margin: 40px 0; font-family: var(--serif); font-style: italic; font-weight: 300; font-size: clamp(20px, 2vw, 28px); line-height: 1.4; opacity: 0.85; }
+  .article-body .prose ul, .article-body .prose ol { padding-left: 24px; margin-bottom: 28px; }
+  .article-body .prose li { font-family: var(--serif); font-weight: 300; font-size: clamp(17px, 1.3vw, 21px); line-height: 1.65; opacity: 0.85; margin-bottom: 10px; }
+  .article-body .prose p.first-para::first-letter { font-family: var(--serif); font-style: italic; font-weight: 700; font-size: 5.5em; line-height: 0.7; float: left; margin: 0.08em 0.12em 0 0; color: var(--signal); }
+  .placeholder { font-family: var(--mono); font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.35; padding: 48px 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); text-align: center; }
+
+  /* FOOTER */
+  footer { background: var(--ink); color: var(--paper); padding: 60px 32px 32px; border-top: 1px solid var(--rule); }
+  .f-inner { max-width: 1440px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px; }
+  .f-bottom { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; opacity: 0.4; text-transform: uppercase; }
+
+  @media (max-width: 980px) {
+    .nav ul { display: none; }
+    .article-body { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+
+<nav class="nav" id="nav">
+  <a href="../index.html" class="mark">Lumis</a>
+  <ul>
+    <li><a class="link" href="../index.html">Index</a></li>
+    <li><a class="link" href="../work.html">Work</a></li>
+    <li><a class="link" href="../manifesto.html">Manifesto</a></li>
+    <li><a class="link active" href="../journal.html">Journal</a></li>
+    <li><a class="link" href="../pricing.html">Pricing</a></li>
+    <li><a class="link" href="../contact.html">Contact</a></li>
+  </ul>
+  <a href="../contact.html" class="btn-primary">Start building <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 10L10 2M10 2H4M10 2V8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></a>
+</nav>
+
+<header class="article-header">
+  <div class="breadcrumb">
+    <a href="../journal.html">Journal</a>
+    <span class="sep">/</span>
+    <span class="cat">Process</span>
+  </div>
+  <div class="meta-row">
+    <span class="badge">Process</span>
+    <span class="dot"></span>
+    <span>Dec 8, 2025</span>
+    <span class="dot"></span>
+    <span>14 min read</span>
+  </div>
+  <h1>The brief that changed everything: on client collaboration</h1>
+  <div class="author-bar">
+    <div class="author">
+      <div class="avatar"><img src="../assets/journal/the-brief-that-changed-everything-on-client-collaboration/cover.jpg" alt="Sena Adusei" /></div>
+      <div>
+        <div class="name">Sena Adusei</div>
+        <div class="role">Lumis Studio</div>
+      </div>
+    </div>
+    <a href="../journal.html" class="back-link">← All essays</a>
+  </div>
+</header>
+
+
+<div class="hero-img">
+  <figure>
+    <img src="../assets/journal/the-brief-that-changed-everything-on-client-collaboration/cover.jpg" alt="The brief that changed everything: on client collaboration" />
+  </figure>
+</div>
+
+
+<div class="article-body">
+  <div></div>
+  <div class="prose">
+    
+    <p class="placeholder">// Full essay coming soon</p>
+    
+  </div>
+  <div></div>
+</div>
+
+<footer>
+  <div class="f-inner">
+    <span class="f-bottom">© 2026 Lumis Studio</span>
+    <a href="../journal.html" class="back-link">← Back to Journal</a>
+  </div>
+</footer>
+
+<script>
+addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', scrollY > 40);
+  const pct = scrollY / (document.body.scrollHeight - innerHeight);
+  document.getElementById('progress').style.transform = `scaleX(${pct})`;
+}, { passive: true });
+gsap.from('header', { opacity: 0, y: 30, duration: 1.2, ease: 'expo.out' });
+</script>
+</body>
+</html>

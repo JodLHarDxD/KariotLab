@@ -73,13 +73,16 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("build",   help="Render content/ into the HTML pages (default).")
     sub.add_parser("extract", help="Populate content/ from today's HTML (run once).")
     sub.add_parser("index",   help="Write content_index.json for chatbot grounding.")
+    sub.add_parser("pages",   help="Generate per-slug journal/*.html pages.")
     sub.add_parser("watch",   help="Watch content/ + templates/ and rebuild on change.")
 
     args = parser.parse_args(argv)
     cmd = args.cmd or "build"
     if cmd == "build":
+        from lumis_build.pages import build_journal_pages
         build_all()
-        print("✓ build complete")
+        n = build_journal_pages()
+        print(f"✓ build complete ({n} journal pages)")
         return 0
     if cmd == "extract":
         return cmd_extract()
@@ -88,6 +91,11 @@ def main(argv: list[str] | None = None) -> int:
         from lumis_build import config
         records = build_index()
         print(f"✓ content_index.json — {len(records)} records → {config.ROOT / 'content_index.json'}")
+        return 0
+    if cmd == "pages":
+        from lumis_build.pages import build_journal_pages
+        n = build_journal_pages()
+        print(f"✓ {n} journal pages written to journal/")
         return 0
     if cmd == "watch":
         from lumis_build.watcher import watch
