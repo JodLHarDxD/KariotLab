@@ -73,6 +73,7 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("build",   help="Render content/ into the HTML pages (default).")
     sub.add_parser("extract", help="Populate content/ from today's HTML (run once).")
     sub.add_parser("index",   help="Write content_index.json for chatbot grounding.")
+    sub.add_parser("watch",   help="Watch content/ + templates/ and rebuild on change.")
 
     args = parser.parse_args(argv)
     cmd = args.cmd or "build"
@@ -87,6 +88,10 @@ def main(argv: list[str] | None = None) -> int:
         from lumis_build import config
         records = build_index()
         print(f"✓ content_index.json — {len(records)} records → {config.ROOT / 'content_index.json'}")
+        return 0
+    if cmd == "watch":
+        from lumis_build.watcher import watch
+        watch()
         return 0
     parser.print_help()
     return 2
