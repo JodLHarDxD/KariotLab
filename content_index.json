@@ -1,0 +1,263 @@
+[
+  {
+    "type": "member",
+    "slug": "mara-castellan",
+    "url": "contact.html",
+    "title": "Mara Castellán"
+  },
+  {
+    "type": "member",
+    "slug": "aiko-tanaka",
+    "url": "contact.html",
+    "title": "Aiko Tanaka"
+  },
+  {
+    "type": "member",
+    "slug": "eli-okafor",
+    "url": "contact.html",
+    "title": "Eli Okafor"
+  },
+  {
+    "type": "member",
+    "slug": "theo-halasz",
+    "url": "contact.html",
+    "title": "Theo Halász"
+  },
+  {
+    "type": "work",
+    "slug": "north-capital",
+    "url": "case-study.html?slug=north-capital",
+    "title": "North Capital — quietly opinionated finance for builders.",
+    "description": "Series A · Identity · Living system · Multi-surface · 18 designers in motion",
+    "tags": [
+      "Fintech",
+      "B2B",
+      "Identity",
+      "Voice",
+      "Motion"
+    ]
+  },
+  {
+    "type": "work",
+    "slug": "atelier-vesta",
+    "url": "case-study.html?slug=atelier-vesta",
+    "title": "Atelier Vesta — slow beauty, considered.",
+    "description": "Pre-seed · Identity · Packaging system",
+    "tags": [
+      "D2C",
+      "Beauty",
+      "Editorial"
+    ]
+  },
+  {
+    "type": "work",
+    "slug": "hum",
+    "url": "case-study.html?slug=hum",
+    "title": "Hum — observability, finally readable.",
+    "description": "Series Seed · Identity · Product UI · Marketing site",
+    "tags": [
+      "B2B",
+      "Dev tools",
+      "Voice"
+    ]
+  },
+  {
+    "type": "work",
+    "slug": "casa-lume",
+    "url": "case-study.html?slug=casa-lume",
+    "title": "Casa Lume — slow hotels, in light.",
+    "description": "Boutique chain · Identity system across 9 properties · Print + digital",
+    "tags": [
+      "Hospitality",
+      "Multi-property",
+      "Print",
+      "Editorial"
+    ]
+  },
+  {
+    "type": "work",
+    "slug": "slow",
+    "url": "case-study.html?slug=slow",
+    "title": "Slow — sleep, structured.",
+    "description": "D2C · Identity · Packaging",
+    "tags": [
+      "Health",
+      "D2C"
+    ]
+  },
+  {
+    "type": "work",
+    "slug": "selected",
+    "url": "case-study.html?slug=selected",
+    "title": "Selected — coffee, considered.",
+    "description": "Solo founder · Full system in 9 days",
+    "tags": [
+      "D2C",
+      "Coffee",
+      "Editorial"
+    ]
+  },
+  {
+    "type": "work",
+    "slug": "brick",
+    "url": "case-study.html?slug=brick",
+    "title": "Brick — infrastructure, named honestly.",
+    "description": "Series Seed · Identity · Voice rules",
+    "tags": [
+      "B2B",
+      "Infrastructure"
+    ]
+  },
+  {
+    "type": "work",
+    "slug": "field-notes",
+    "url": "case-study.html?slug=field-notes",
+    "title": "Field Notes — software for thinkers.",
+    "description": "Pre-seed · Identity · Product · Marketing site · Living system in production",
+    "tags": [
+      "Creative tools",
+      "Living system",
+      "Motion"
+    ]
+  },
+  {
+    "type": "work",
+    "slug": "vesper",
+    "url": "case-study.html?slug=vesper",
+    "title": "Vesper — garments after dark.",
+    "description": "D2C apparel · Photographic system",
+    "tags": [
+      "D2C",
+      "Apparel"
+    ]
+  },
+  {
+    "type": "work",
+    "slug": "seed",
+    "url": "case-study.html?slug=seed",
+    "title": "Seed — primary care, replanted.",
+    "description": "Series A · Identity · Patient app · In-clinic surfaces",
+    "tags": [
+      "Health",
+      "Service",
+      "Multi-surface"
+    ]
+  },
+  {
+    "type": "journal",
+    "slug": "what-ycs-top-brands-have-in-common",
+    "url": "journal/what-ycs-top-brands-have-in-common.html",
+    "title": "What YC's top brands have in common — YC's top brands",
+    "description": "After auditing 80 Y Combinator graduates, three typographic signatures and two color archetypes dominate category leadership.",
+    "category": "Founders",
+    "date": "Apr 10, 2026",
+    "author": "Sena Adusei"
+  },
+  {
+    "type": "journal",
+    "slug": "the-48-hour-brand-sprint-what-we-learned-from-200-sessions",
+    "url": "journal/the-48-hour-brand-sprint-what-we-learned-from-200-sessions.html",
+    "title": "The 48-hour brand sprint: what we learned from 200 sessions — 200 sessions",
+    "description": "Speed reveals truth. When founders have two days to crystallise their brand position, the constraints expose what they actually believe about their company.",
+    "category": "Process",
+    "date": "Mar 28, 2026",
+    "author": "Marcus Chen"
+  },
+  {
+    "type": "journal",
+    "slug": "why-italics-are-having-a-moment",
+    "url": "journal/why-italics-are-having-a-moment.html",
+    "title": "Why italics are having a moment — italics",
+    "description": "The slant is back — and it's not nostalgia. It's the visual grammar of conviction in an era of machine-flat aesthetics.",
+    "category": "Culture",
+    "date": "Mar 14, 2026",
+    "author": "Yuki Tanaka"
+  },
+  {
+    "type": "journal",
+    "slug": "color-theory-isnt-enough-emotional-architecture",
+    "url": "journal/color-theory-isnt-enough-emotional-architecture.html",
+    "title": "Color theory isn't enough: emotional architecture — emotional architecture",
+    "description": "Hue, saturation, lightness — these are properties, not feelings. We've been asking the wrong questions about what color actually does in a brand system.",
+    "category": "Branding",
+    "date": "Feb 27, 2026",
+    "author": "Marcus Chen"
+  },
+  {
+    "type": "journal",
+    "slug": "founders-dont-need-agencies-they-need-systems",
+    "url": "journal/founders-dont-need-agencies-they-need-systems.html",
+    "title": "Founders don't need agencies. They need systems. — systems",
+    "description": "The agency relationship is fundamentally incompatible with the pace of early-stage company building. Here's what actually works.",
+    "category": "Founders",
+    "date": "Feb 12, 2026",
+    "author": "Amara Diallo"
+  },
+  {
+    "type": "journal",
+    "slug": "the-brief-that-changed-everything-on-client-collaboration",
+    "url": "journal/the-brief-that-changed-everything-on-client-collaboration.html",
+    "title": "The brief that changed everything: on client collaboration — changed everything",
+    "description": "One nine-word creative brief — \"Make it feel like we've always existed\" — and the four-month journey it triggered.",
+    "category": "Process",
+    "date": "Dec 8, 2025",
+    "author": "Sena Adusei"
+  },
+  {
+    "type": "journal",
+    "slug": "five-typography-choices-that-built-category-leaders",
+    "url": "journal/five-typography-choices-that-built-category-leaders.html",
+    "title": "Five typography choices that built category leaders — typography choices",
+    "description": "From Stripe's tabular numerals to Linear's negative tracking — the micro-decisions that telegraph precision and intent at scale.",
+    "category": "Culture",
+    "date": "Nov 19, 2025",
+    "author": "Yuki Tanaka"
+  },
+  {
+    "type": "service",
+    "slug": "starter",
+    "url": "pricing.html",
+    "title": "Starter",
+    "description": "For solo founders and pre-seed teams. A real foundation, in an afternoon.",
+    "price": "$49 / mo",
+    "features": [
+      "One full brand system",
+      "2 strategic revisions / month",
+      "Standard library (24 primitives)",
+      "Export: Figma, code, tokens",
+      "Email support · 48h response"
+    ]
+  },
+  {
+    "type": "service",
+    "slug": "studio",
+    "url": "pricing.html",
+    "title": "Studio",
+    "description": "For teams shipping product, marketing, and sub-brands. Lumis stays in the room.",
+    "price": "$249 / mo",
+    "features": [
+      "Everything in Starter, no caps",
+      "Unlimited iterations + sub-brands",
+      "Living system · continuous",
+      "Extended library (120+ primitives)",
+      "Async senior creative review",
+      "Slack channel · 4h response"
+    ]
+  },
+  {
+    "type": "service",
+    "slug": "scale",
+    "url": "pricing.html",
+    "title": "Scale",
+    "description": "For Series-B+ teams managing brand portfolios across markets, languages, and product lines.",
+    "price": "Custom",
+    "features": [
+      "Everything in Studio, dedicated",
+      "Multi-brand portfolio management",
+      "Localization, RTL, multi-market",
+      "Custom training on your archive",
+      "SSO, audit logs, compliance",
+      "Dedicated principal · 1h response"
+    ]
+  }
+]

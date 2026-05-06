@@ -70,8 +70,9 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="build.py", description="Lumis content build")
     sub = parser.add_subparsers(dest="cmd")
 
-    sub.add_parser("build", help="Render content/ into the HTML pages (default).")
+    sub.add_parser("build",   help="Render content/ into the HTML pages (default).")
     sub.add_parser("extract", help="Populate content/ from today's HTML (run once).")
+    sub.add_parser("index",   help="Write content_index.json for chatbot grounding.")
 
     args = parser.parse_args(argv)
     cmd = args.cmd or "build"
@@ -81,6 +82,12 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     if cmd == "extract":
         return cmd_extract()
+    if cmd == "index":
+        from lumis_build.indexer import build_index
+        from lumis_build import config
+        records = build_index()
+        print(f"✓ content_index.json — {len(records)} records → {config.ROOT / 'content_index.json'}")
+        return 0
     parser.print_help()
     return 2
 
