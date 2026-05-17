@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Journal — Lumis</title>
-<meta name="description" content="Writing on brand strategy, visual culture, and the craft of building iconic companies. By the principals of Lumis." />
+<title>Journal — KariotLAB</title>
+<meta name="description" content="Writing on brand strategy, visual culture, and the craft of building iconic companies. By the principals of KariotLAB." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;0,6..72,800;1,6..72,300;1,6..72,400;1,6..72,500;1,6..72,600;1,6..72,700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -45,8 +45,18 @@
   /* NAV */
   .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; padding: 20px 32px; display: flex; justify-content: space-between; align-items: center; backdrop-filter: blur(8px) saturate(120%); background: linear-gradient(180deg, rgba(10,9,8,0.6) 0%, rgba(10,9,8,0) 100%); border-bottom: 1px solid transparent; transition: border-color 0.3s, background 0.3s; }
   .nav.scrolled { background: rgba(10,9,8,0.85); border-bottom-color: var(--rule); }
-  .nav .mark { font-family: var(--serif); font-size: 22px; font-style: italic; letter-spacing: -0.02em; color: var(--paper); text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
-  .nav .mark::before { content: ''; width: 8px; height: 8px; background: var(--signal); border-radius: 50%; box-shadow: 0 0 12px var(--signal); animation: pulse 2.4s ease-in-out infinite; }
+  .nav .mark {
+    text-decoration: none; display: inline-flex; align-items: baseline; gap: 0;
+  }
+  .mark-k {
+    font-family: var(--sans); font-weight: 800; font-size: 21px;
+    letter-spacing: -0.04em; color: var(--paper); text-transform: uppercase; line-height: 1;
+  }
+  .mark-lab {
+    font-family: var(--mono); font-weight: 400; font-size: 12px;
+    letter-spacing: 0.24em; color: var(--signal); text-transform: uppercase;
+    line-height: 1; align-self: flex-end; padding-bottom: 2px; padding-left: 2px;
+  }
   .nav ul { list-style: none; display: flex; gap: 28px; }
   .nav a.link { color: var(--paper); text-decoration: none; font-size: 13px; font-weight: 400; letter-spacing: 0.04em; opacity: 0.7; transition: opacity 0.3s; position: relative; }
   .nav a.link:hover, .nav a.link.active { opacity: 1; }
@@ -354,6 +364,7 @@
 </style>
 </head>
 <body data-cursor-surface="dark">
+<script src="preloader.js"></script>
 
 <!-- Noise -->
 <svg class="noise" xmlns="http://www.w3.org/2000/svg" width="300" height="300">
@@ -368,7 +379,7 @@
 
 <!-- NAV -->
 <nav class="nav" id="nav">
-  <a href="index.html" class="mark">Lumis</a>
+  <a href="index.html" class="mark"><span class="mark-k">KARIOT</span><span class="mark-lab">LAB</span></a>
   <ul>
     <li><a class="link" href="index.html">Index</a></li>
     <li><a class="link" href="work.html">Work</a></li>
@@ -386,11 +397,11 @@
 <!-- PAGE HEADER -->
 <header class="page-head">
   <div class="left">
-    <span class="eyebrow">// Lumis Journal · Est. 2025</span>
+    <span class="eyebrow">// KariotLAB Journal · Est. 2025</span>
     <h1 class="reveal">Journal</h1>
   </div>
   <div class="right reveal">
-    <p class="lede">Writing on brand strategy, visual culture, and the craft of building <em>iconic</em> companies. From the principals and collaborators of Lumis Studio.</p>
+    <p class="lede">Writing on brand strategy, visual culture, and the craft of building <em>iconic</em> companies. From the principals and collaborators of KariotLAB Studio.</p>
     <div class="stats">
       <div class="stat">
         <div class="n">48</div>
@@ -464,7 +475,7 @@
 <div class="journal-rail-outer" id="journalRailSection">
 <div class="journal-rail" id="journalRail" tabindex="0" aria-label="Journal essays">
 
-  <!-- LUMIS:BEGIN journal-grid -->
+  <!-- KARIOTLAB:BEGIN journal-grid -->
   <a href="journal/what-ycs-top-brands-have-in-common.html" class="article" data-cat="founders">
     <div class="thumb">
       <img src="assets/journal/what-ycs-top-brands-have-in-common/cover.jpg" alt="What YC&#39;s top brands have in common" loading="lazy" decoding="async" sizes="(max-width: 640px) calc(100vw - 40px), (max-width: 1024px) 42vw, 34vw" />
@@ -584,7 +595,7 @@
       </div>
     </div>
   </a>
-  <!-- LUMIS:END journal-grid -->
+  <!-- KARIOTLAB:END journal-grid -->
 
 </div>
 </div>
@@ -598,7 +609,7 @@
       <p>New essays on brand strategy and visual culture, twice a month. Read by 12,000 founders and designers.</p>
     </div>
     <div class="right">
-      <form onsubmit="event.preventDefault();const e=this.querySelector('input').value.trim();location.href='mailto:jodl.hrs03@gmail.com?subject=Lumis%20dispatch%20signup&body='+encodeURIComponent('Subscribe this email: '+e);this.querySelector('button').textContent='Email opened';">
+      <form onsubmit="event.preventDefault();const e=this.querySelector('input').value.trim();location.href='mailto:jodl.hrs03@gmail.com?subject=KariotLAB%20dispatch%20signup&body='+encodeURIComponent('Subscribe this email: '+e);this.querySelector('button').textContent='Email opened';">
         <input type="email" placeholder="hello@yourcompany.com" required />
         <button type="submit">Subscribe to the dispatch</button>
         <span class="sub">No noise. Unsubscribe anytime.</span>
@@ -614,7 +625,7 @@
       <div class="col-1">
         <span class="label">// The studio</span>
         <p>Creative intelligence for the next generation of founders. New York · Lisbon · Tokyo. Currently in private beta.</p>
-        <form class="signup" onsubmit="event.preventDefault();const e=this.querySelector('input').value.trim();location.href='mailto:jodl.hrs03@gmail.com?subject=Lumis%20dispatch%20signup&body='+encodeURIComponent('Subscribe this email: '+e);this.querySelector('button').textContent='Email opened';">
+        <form class="signup" onsubmit="event.preventDefault();const e=this.querySelector('input').value.trim();location.href='mailto:jodl.hrs03@gmail.com?subject=KariotLAB%20dispatch%20signup&body='+encodeURIComponent('Subscribe this email: '+e);this.querySelector('button').textContent='Email opened';">
           <input type="email" placeholder="hello@yourcompany.com" required />
           <button type="submit">Subscribe</button>
         </form>
@@ -632,8 +643,8 @@
         <h4>Studio</h4>
         <ul>
           <li><a href="contact.html">Contact</a></li>
-          <li><a href="mailto:jodl.hrs03@gmail.com?subject=Lumis%20press%20request">Press kit</a></li>
-          <li><a href="mailto:jodl.hrs03@gmail.com?subject=Lumis%20careers">Careers</a></li>
+          <li><a href="mailto:jodl.hrs03@gmail.com?subject=KariotLAB%20press%20request">Press kit</a></li>
+          <li><a href="mailto:jodl.hrs03@gmail.com?subject=KariotLAB%20careers">Careers</a></li>
           <li><a href="work.html">Brand archive</a></li>
         </ul>
       </div>
@@ -658,7 +669,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2026 Lumis Studio · All rights reserved</span>
+      <span>© 2026 KariotLAB Studio · All rights reserved</span>
       <span class="ops"><span class="gdot"></span>System operational · 99.99% uptime · Last incident: never</span>
       <span>v4.0.7 · Built in motion</span>
     </div>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Pricing — Lumis</title>
+<title>Pricing — KariotLAB</title>
 <meta name="description" content="Three depths of system. One brand worth defending. See every feature, side by side." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -42,8 +42,18 @@
 
   .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; padding: 20px 32px; display: flex; justify-content: space-between; align-items: center; backdrop-filter: blur(8px); background: linear-gradient(180deg, rgba(10,9,8,0.6), rgba(10,9,8,0)); transition: background 0.3s; border-bottom: 1px solid transparent; }
   .nav.scrolled { background: rgba(10,9,8,0.85); border-bottom-color: var(--rule); }
-  .nav .mark { font-family: var(--serif); font-size: 22px; font-style: italic; letter-spacing: -0.02em; color: var(--paper); text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
-  .nav .mark::before { content:''; width: 8px; height: 8px; background: var(--signal); border-radius: 50%; box-shadow: 0 0 12px var(--signal); animation: pulse 2.4s ease-in-out infinite; }
+  .nav .mark {
+    text-decoration: none; display: inline-flex; align-items: baseline; gap: 0;
+  }
+  .mark-k {
+    font-family: var(--sans); font-weight: 800; font-size: 21px;
+    letter-spacing: -0.04em; color: var(--paper); text-transform: uppercase; line-height: 1;
+  }
+  .mark-lab {
+    font-family: var(--mono); font-weight: 400; font-size: 12px;
+    letter-spacing: 0.24em; color: var(--signal); text-transform: uppercase;
+    line-height: 1; align-self: flex-end; padding-bottom: 2px; padding-left: 2px;
+  }
   .nav ul { list-style: none; display: flex; gap: 28px; }
   .nav a.link { color: var(--paper); text-decoration: none; font-size: 13px; opacity: 0.7; position: relative; letter-spacing: 0.04em; transition: opacity 0.3s; }
   .nav a.link:hover, .nav a.link.active { opacity: 1; }
@@ -188,6 +198,7 @@
 </style>
 </head>
 <body data-cursor-surface="dark">
+<script src="preloader.js"></script>
 
 <svg class="noise" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(#n)"/></svg>
 <div class="spotlight" id="spotlight"></div>
@@ -195,7 +206,7 @@
 <div class="cursor-dot" id="dot"></div>
 
 <nav class="nav" id="nav">
-  <a href="index.html" class="mark">Lumis</a>
+  <a href="index.html" class="mark"><span class="mark-k">KARIOT</span><span class="mark-lab">LAB</span></a>
   <ul>
     <li><a class="link" href="index.html">Index</a></li>
     <li><a class="link" href="work.html">Work</a></li>
@@ -221,7 +232,7 @@
 </div>
 
 <section class="pricing-grid" data-cursor-surface="dark">
-  <!-- LUMIS:BEGIN pricing-tiers -->
+  <!-- KARIOTLAB:BEGIN pricing-tiers -->
   <div class="tier reveal">
     <span class="name">Starter</span>
     <div>
@@ -242,7 +253,7 @@
     <span class="name">Studio</span>
     <div>
       <span class="price">$<span class="ital" data-monthly="249" data-yearly="199">249</span><span class="unit">/ mo</span></span>
-      <p class="desc">For teams shipping product, marketing, and sub-brands. Lumis stays in the room.</p>
+      <p class="desc">For teams shipping product, marketing, and sub-brands. KariotLAB stays in the room.</p>
     </div>
     <ul>
       <li><span class="check">→</span><span>Everything in Starter, no caps</span></li>
@@ -270,7 +281,7 @@
     </ul>
     <a href="contact.html" class="cta-tier">Talk to a principal</a>
   </div>
-  <!-- LUMIS:END pricing-tiers -->
+  <!-- KARIOTLAB:END pricing-tiers -->
 </section>
 
 <section class="compare-section">
@@ -331,7 +342,7 @@
   <p>14 days. Full system access. No card. If by day 14 you don't have a brand you can defend in a board meeting, we don't keep your money. We keep working until you do, or you walk free.</p>
   <div class="signature">
     <span class="by">— Signed at the studio door</span>
-    <em>Lumis Studio</em>
+    <em>KariotLAB Studio</em>
   </div>
 </section>
 
@@ -340,27 +351,27 @@
   <div class="faq-list">
     <details class="faq" open>
       <summary>How is this different from <em>hiring an agency?</em><span class="icon">+</span></summary>
-      <div class="answer">An agency takes 3&ndash;6 months and costs $80k&ndash;$300k+ per cycle, then disappears. Lumis takes hours, costs $49&ndash;$249/mo, and stays with your brand as it evolves. The work is informed by the same award archive senior agency creatives reference &mdash; the difference is that <em>you stay in the room</em> for every decision.</div>
+      <div class="answer">An agency takes 3&ndash;6 months and costs $80k&ndash;$300k+ per cycle, then disappears. KariotLAB takes hours, costs $49&ndash;$249/mo, and stays with your brand as it evolves. The work is informed by the same award archive senior agency creatives reference &mdash; the difference is that <em>you stay in the room</em> for every decision.</div>
     </details>
     <details class="faq">
       <summary>Do I <em>own</em> the output?<span class="icon">+</span></summary>
-      <div class="answer">Yes, fully. Every wordmark, palette, type spec, voice rule, and asset Lumis generates is yours, free and clear, exportable in W3C design tokens, Figma, code, or print-ready. Cancel any time, take everything with you.</div>
+      <div class="answer">Yes, fully. Every wordmark, palette, type spec, voice rule, and asset KariotLAB generates is yours, free and clear, exportable in W3C design tokens, Figma, code, or print-ready. Cancel any time, take everything with you.</div>
     </details>
     <details class="faq">
       <summary>What does <em>"living system"</em> actually mean?<span class="icon">+</span></summary>
-      <div class="answer">Your brand isn't frozen at launch. As you raise, pivot, hire, or expand, Lumis recommends thoughtful updates &mdash; with provenance, versioning, and equity carried forward. You approve every change. Roll back anything. Watch the system learn alongside the company.</div>
+      <div class="answer">Your brand isn't frozen at launch. As you raise, pivot, hire, or expand, KariotLAB recommends thoughtful updates &mdash; with provenance, versioning, and equity carried forward. You approve every change. Roll back anything. Watch the system learn alongside the company.</div>
     </details>
     <details class="faq">
       <summary>What if my brand is <em>already established?</em><span class="icon">+</span></summary>
       <div class="answer">Scale plan includes <em>custom training</em> on your existing brand archive &mdash; we encode what already works, then help you evolve it without breaking equity. Many of our most loved cases are not first-time brand builds; they are renovations done with respect.</div>
     </details>
     <details class="faq">
-      <summary>Can I see <em>real work</em> done with Lumis?<span class="icon">+</span></summary>
+      <summary>Can I see <em>real work</em> done with KariotLAB?<span class="icon">+</span></summary>
       <div class="answer">142 systems shipped to date, archived in <a href="work.html" style="color:var(--signal);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px;">/work</a>. North Capital, Atelier Vesta, Casa Lume, Field Notes, Selected, Hum, Brick, Slow, Vesper, Seed &mdash; every system live, evolving, and signed.</div>
     </details>
     <details class="faq">
       <summary>What if I'm <em>not technical?</em><span class="icon">+</span></summary>
-      <div class="answer">Most of our founders aren't. Lumis speaks plain language, asks the right questions, and produces a system you can hand to a developer or designer who is &mdash; or use directly through our Figma + code exports.</div>
+      <div class="answer">Most of our founders aren't. KariotLAB speaks plain language, asks the right questions, and produces a system you can hand to a developer or designer who is &mdash; or use directly through our Figma + code exports.</div>
     </details>
     <details class="faq">
       <summary>What happens if I <em>cancel?</em><span class="icon">+</span></summary>
@@ -368,7 +379,7 @@
     </details>
     <details class="faq">
       <summary>Do you work with <em>agencies</em> or <em>internal teams?</em><span class="icon">+</span></summary>
-      <div class="answer">Yes, both. Several Series-B teams use Lumis as their internal brand operating system, run by their existing in-house designers. Several agencies use Lumis to do strategic exploration faster, then layer their own craft on top. The Scale plan supports either workflow.</div>
+      <div class="answer">Yes, both. Several Series-B teams use KariotLAB as their internal brand operating system, run by their existing in-house designers. Several agencies use KariotLAB to do strategic exploration faster, then layer their own craft on top. The Scale plan supports either workflow.</div>
     </details>
   </div>
 </section>
@@ -383,11 +394,11 @@
     <div class="f-grid">
       <div class="col"><h4>// The studio</h4><p>Creative intelligence for the next generation of founders.</p></div>
       <div class="col"><h4>Product</h4><ul><li><a href="index.html">Index</a></li><li><a href="work.html">Work</a></li><li><a href="pricing.html">Pricing</a></li></ul></div>
-      <div class="col"><h4>Studio</h4><ul><li><a href="contact.html">Contact</a></li><li><a href="manifesto.html">Manifesto</a></li><li><a href="journal.html">Journal</a></li><li><a href="mailto:jodl.hrs03@gmail.com?subject=Lumis%20press%20request">Press</a></li></ul></div>
+      <div class="col"><h4>Studio</h4><ul><li><a href="contact.html">Contact</a></li><li><a href="manifesto.html">Manifesto</a></li><li><a href="journal.html">Journal</a></li><li><a href="mailto:jodl.hrs03@gmail.com?subject=KariotLAB%20press%20request">Press</a></li></ul></div>
       <div class="col"><h4>Elsewhere</h4><ul><li><a href="https://x.com/har_ddy" target="_blank" rel="noopener">X</a></li><li><a href="https://www.instagram.com/jodlxhrs_/" target="_blank" rel="noopener">Instagram</a></li><li><a href="https://github.com/JodLHarDxD" target="_blank" rel="noopener">GitHub</a></li><li><a href="https://www.linkedin.com/in/hriddhish-ranjan-sarkar/" target="_blank" rel="noopener">LinkedIn</a></li><li><a href="https://www.youtube.com/@JodLHrs" target="_blank" rel="noopener">YouTube</a></li></ul></div>
     </div>
     <div class="f-bottom">
-      <span>© 2026 Lumis Studio</span>
+      <span>© 2026 KariotLAB Studio</span>
       <span class="ops"><span class="gdot"></span>System operational · 99.99%</span>
       <span>v4.0.7</span>
     </div>

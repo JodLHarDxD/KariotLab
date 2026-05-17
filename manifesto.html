@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Manifesto — Lumis</title>
-<meta name="description" content="What Lumis is done tolerating, and what it's building instead. A short, signed document on the practice of brand." />
+<title>Manifesto — KariotLAB</title>
+<meta name="description" content="What KariotLAB is done tolerating, and what it's building instead. A short, signed document on the practice of brand." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,300;1,6..72,400;1,6..72,500;1,6..72,600;1,6..72,700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -44,8 +44,18 @@
   /* NAV — light variant */
   .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; padding: 20px 32px; display: flex; justify-content: space-between; align-items: center; backdrop-filter: blur(8px); background: linear-gradient(180deg, rgba(242,235,218,0.7), rgba(242,235,218,0)); transition: background 0.3s, border-color 0.3s; border-bottom: 1px solid transparent; }
   .nav.scrolled { background: rgba(242,235,218,0.92); border-bottom-color: var(--rule-d); }
-  .nav .mark { font-family: var(--serif); font-size: 22px; font-style: italic; letter-spacing: -0.02em; color: var(--ink); text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
-  .nav .mark::before { content:''; width: 8px; height: 8px; background: var(--signal); border-radius: 50%; box-shadow: 0 0 12px var(--signal); animation: pulse 2.4s ease-in-out infinite; }
+  .nav .mark {
+    text-decoration: none; display: inline-flex; align-items: baseline; gap: 0;
+  }
+  .mark-k {
+    font-family: var(--sans); font-weight: 800; font-size: 21px;
+    letter-spacing: -0.04em; color: var(--paper); text-transform: uppercase; line-height: 1;
+  }
+  .mark-lab {
+    font-family: var(--mono); font-weight: 400; font-size: 12px;
+    letter-spacing: 0.24em; color: var(--signal); text-transform: uppercase;
+    line-height: 1; align-self: flex-end; padding-bottom: 2px; padding-left: 2px;
+  }
   .nav ul { list-style: none; display: flex; gap: 28px; }
   .nav a.link { color: var(--ink); text-decoration: none; font-size: 13px; opacity: 0.7; position: relative; letter-spacing: 0.04em; transition: opacity 0.3s; }
   .nav a.link:hover, .nav a.link.active { opacity: 1; }
@@ -211,6 +221,7 @@
 </style>
 </head>
 <body data-cursor-surface="light">
+<script src="preloader.js"></script>
 
 <svg class="noise" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(#n)"/></svg>
 <div class="spotlight" id="spotlight"></div>
@@ -218,7 +229,7 @@
 <div class="cursor-dot" id="dot"></div>
 
 <nav class="nav" id="nav">
-  <a href="index.html" class="mark">Lumis</a>
+  <a href="index.html" class="mark"><span class="mark-k">KARIOT</span><span class="mark-lab">LAB</span></a>
   <ul>
     <li><a class="link" href="index.html">Index</a></li>
     <li><a class="link" href="work.html">Work</a></li>
@@ -255,9 +266,9 @@
 
   <h2>What we are <em>building</em>.</h2>
 
-  <p>Lumis is creative intelligence. Trained on a decade of award-winning work &mdash; Cannes, D&AD, Brand New, Type Directors, ADC. Tagged for <em>why</em> the work moves people, not just <em>that</em> it does. Built to <em>argue alongside you</em>, not to <em>execute for you</em>.</p>
+  <p>KariotLAB is creative intelligence. Trained on a decade of award-winning work &mdash; Cannes, D&AD, Brand New, Type Directors, ADC. Tagged for <em>why</em> the work moves people, not just <em>that</em> it does. Built to <em>argue alongside you</em>, not to <em>execute for you</em>.</p>
 
-  <p>You bring the thesis. Lumis brings the discipline. Together, in <em>hours not months</em>, you produce a brand system that has been examined from a hundred angles and decided on purpose. Not a moodboard. Not a deck. A <em>defended position</em>.</p>
+  <p>You bring the thesis. KariotLAB brings the discipline. Together, in <em>hours not months</em>, you produce a brand system that has been examined from a hundred angles and decided on purpose. Not a moodboard. Not a deck. A <em>defended position</em>.</p>
 
   <blockquote>The work that matters is the work you can defend.</blockquote>
 
@@ -265,7 +276,7 @@
 </article>
 
 <section class="compare" data-cursor-surface="dark">
-  <h3>Industry standard <em>vs.</em> Lumis</h3>
+  <h3>Industry standard <em>vs.</em> KariotLAB</h3>
   <div class="grid">
     <div class="col industry">
       <h4>What the industry sells</h4>
@@ -279,7 +290,7 @@
       </ul>
     </div>
     <div class="col lumis">
-      <h4 class="signal">What Lumis is</h4>
+      <h4 class="signal">What KariotLAB is</h4>
       <ul>
         <li>A <em>defended position</em>, with system to enforce it</li>
         <li>Hours from brief to <em>working artifact</em></li>
@@ -310,7 +321,7 @@
     <div class="principle">
       <span class="num">03</span>
       <h4>Speed is a <em>feature</em> of clarity, not a tradeoff.</h4>
-      <p>The reason brand work takes six months isn&rsquo;t that the work is hard. It&rsquo;s that the politics are. Lumis removes the politics.</p>
+      <p>The reason brand work takes six months isn&rsquo;t that the work is hard. It&rsquo;s that the politics are. KariotLAB removes the politics.</p>
       <span class="stamp">// Tempo</span>
     </div>
     <div class="principle">
@@ -322,7 +333,7 @@
     <div class="principle">
       <span class="num">05</span>
       <h4>The <em>founder</em> belongs in the room.</h4>
-      <p>You are closest to the work. Your taste is the input most worth listening to. Lumis sits next to you, never in front.</p>
+      <p>You are closest to the work. Your taste is the input most worth listening to. KariotLAB sits next to you, never in front.</p>
       <span class="stamp">// Authorship</span>
     </div>
     <div class="principle">
@@ -338,7 +349,7 @@
   <div class="row">
     <div>
       <span class="by">— Signed at the studio door</span>
-      <div class="name"><em>Lumis Studio</em></div>
+      <div class="name"><em>KariotLAB Studio</em></div>
     </div>
     <div class="meta">
       Vol. 04 · April 2026<br/>
@@ -358,11 +369,11 @@
     <div class="f-grid">
       <div class="col"><h4>// The studio</h4><p>Creative intelligence for the next generation of founders. New York · Lisbon · Tokyo.</p></div>
       <div class="col"><h4>Product</h4><ul><li><a href="index.html">Index</a></li><li><a href="work.html">Work</a></li><li><a href="pricing.html">Pricing</a></li></ul></div>
-      <div class="col"><h4>Studio</h4><ul><li><a href="contact.html">Contact</a></li><li><a href="manifesto.html">Manifesto</a></li><li><a href="journal.html">Journal</a></li><li><a href="mailto:jodl.hrs03@gmail.com?subject=Lumis%20press%20request">Press</a></li></ul></div>
+      <div class="col"><h4>Studio</h4><ul><li><a href="contact.html">Contact</a></li><li><a href="manifesto.html">Manifesto</a></li><li><a href="journal.html">Journal</a></li><li><a href="mailto:jodl.hrs03@gmail.com?subject=KariotLAB%20press%20request">Press</a></li></ul></div>
       <div class="col"><h4>Elsewhere</h4><ul><li><a href="https://x.com/har_ddy" target="_blank" rel="noopener">X</a></li><li><a href="https://www.instagram.com/jodlxhrs_/" target="_blank" rel="noopener">Instagram</a></li><li><a href="https://github.com/JodLHarDxD" target="_blank" rel="noopener">GitHub</a></li><li><a href="https://www.linkedin.com/in/hriddhish-ranjan-sarkar/" target="_blank" rel="noopener">LinkedIn</a></li><li><a href="https://www.youtube.com/@JodLHrs" target="_blank" rel="noopener">YouTube</a></li></ul></div>
     </div>
     <div class="f-bottom">
-      <span>© 2026 Lumis Studio</span>
+      <span>© 2026 KariotLAB Studio</span>
       <span class="ops"><span class="gdot"></span>System operational · 99.99%</span>
       <span>v4.0.7</span>
     </div>

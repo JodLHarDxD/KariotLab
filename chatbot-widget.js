@@ -1,4 +1,4 @@
-/* Lumis AI Chatbot Widget — cinematic floating glassmorphism panel */
+/* KariotLAB AI Chatbot Widget — cinematic floating glassmorphism panel */
 (function () {
   'use strict';
 
@@ -6,7 +6,7 @@
   const API_ENDPOINT = '/api/chat';
   const MAX_HISTORY  = 6;
 
-  const LUMIS_CONTEXT = `Lumis is a brand systems studio. Key facts:
+  const KARIOTLAB_CONTEXT = `KariotLAB is a brand systems studio. Key facts:
 
 WORK (10 case studies): North Capital (Fintech/B2B), Atelier Vesta (D2C Beauty), Hum (B2B Dev tools), Casa Lume (Hospitality), Slow (Health), Selected (D2C Coffee), Brick (B2B SaaS), Field Notes (Creative tools), Vesper (D2C Apparel), Seed (Health).
 
@@ -385,29 +385,29 @@ Contact: contact.html | Work archive: work.html | Pricing: pricing.html`;
     const wrap = document.createElement('div');
     wrap.id = 'lumis-chat';
     wrap.innerHTML = `
-<div id="lc-bar" role="button" aria-label="Open Lumis AI chat" tabindex="0">
+<div id="lc-bar" role="button" aria-label="Open KariotLAB AI chat" tabindex="0">
   <div id="lc-bar-icon" aria-hidden="true"></div>
-  <span id="lc-bar-label"><span>Ask Lumis</span><span class="lc-dim">Work, pricing, methodology</span></span>
+  <span id="lc-bar-label"><span>Ask KariotLAB</span><span class="lc-dim">Work, pricing, methodology</span></span>
   <button id="lc-bar-open" aria-label="Open chat">
     <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
       <path d="M3 13L13 3M13 3H6M13 3V10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
   </button>
 </div>
-<div id="lc-panel" role="dialog" aria-label="Lumis AI Chat">
+<div id="lc-panel" role="dialog" aria-label="KariotLAB AI Chat">
   <div id="lc-header">
     <div id="lc-header-dot"></div>
-    <span id="lc-header-title">Lumis AI</span>
+    <span id="lc-header-title">KariotLAB AI</span>
     <button id="lc-back" aria-label="Back to page">← Page</button>
     <button class="lc-btn-icon" id="lc-expand" title="Expand chat" aria-label="Expand chat">⤢</button>
     <button class="lc-btn-icon" id="lc-minimize" title="Minimize" aria-label="Minimize chat">−</button>
     <button class="lc-btn-icon" id="lc-close" title="Close" aria-label="Close chat">×</button>
   </div>
   <div id="lc-messages">
-    <div class="lc-welcome">// Lumis AI<em>What would you like to know?</em></div>
+    <div class="lc-welcome">// KariotLAB AI<em>What would you like to know?</em></div>
   </div>
   <div id="lc-input-row">
-    <textarea id="lc-input" rows="1" placeholder="Ask Lumis..." aria-label="Chat message"></textarea>
+    <textarea id="lc-input" rows="1" placeholder="Ask KariotLAB..." aria-label="Chat message"></textarea>
     <button id="lc-send" aria-label="Send message">
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
         <path d="M2 8L14 2L9 14L7.5 9L2 8Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" fill="none"/>

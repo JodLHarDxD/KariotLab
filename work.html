@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Work — Lumis</title>
-<meta name="description" content="A curated archive of brand systems built with Lumis. From pre-seed to public." />
+<title>Work — KariotLAB</title>
+<meta name="description" content="A curated archive of brand systems built with KariotLAB. From pre-seed to public." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,300;1,6..72,400;1,6..72,500;1,6..72,600&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -43,8 +43,18 @@
   /* NAV (shared) */
   .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; padding: 20px 32px; display: flex; justify-content: space-between; align-items: center; backdrop-filter: blur(8px); background: linear-gradient(180deg, rgba(10,9,8,0.6) 0%, rgba(10,9,8,0) 100%); transition: border-color 0.3s, background 0.3s; border-bottom: 1px solid transparent; }
   .nav.scrolled { background: rgba(10,9,8,0.85); border-bottom-color: var(--rule); }
-  .nav .mark { font-family: var(--serif); font-size: 22px; font-style: italic; letter-spacing: -0.02em; color: var(--paper); text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
-  .nav .mark::before { content: ''; width: 8px; height: 8px; background: var(--signal); border-radius: 50%; box-shadow: 0 0 12px var(--signal); animation: pulse 2.4s ease-in-out infinite; }
+  .nav .mark {
+    text-decoration: none; display: inline-flex; align-items: baseline; gap: 0;
+  }
+  .mark-k {
+    font-family: var(--sans); font-weight: 800; font-size: 21px;
+    letter-spacing: -0.04em; color: var(--paper); text-transform: uppercase; line-height: 1;
+  }
+  .mark-lab {
+    font-family: var(--mono); font-weight: 400; font-size: 12px;
+    letter-spacing: 0.24em; color: var(--signal); text-transform: uppercase;
+    line-height: 1; align-self: flex-end; padding-bottom: 2px; padding-left: 2px;
+  }
   .nav ul { list-style: none; display: flex; gap: 28px; }
   .nav a.link { color: var(--paper); text-decoration: none; font-size: 13px; opacity: 0.7; transition: opacity 0.3s; position: relative; letter-spacing: 0.04em; }
   .nav a.link:hover, .nav a.link.active { opacity: 1; }
@@ -160,6 +170,7 @@
 </style>
 </head>
 <body data-cursor-surface="dark">
+<script src="preloader.js"></script>
 
 <svg class="noise" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(#n)"/></svg>
 <div class="spotlight" id="spotlight"></div>
@@ -167,7 +178,7 @@
 <div class="cursor-dot" id="dot"></div>
 
 <nav class="nav" id="nav">
-  <a href="index.html" class="mark">Lumis</a>
+  <a href="index.html" class="mark"><span class="mark-k">KARIOT</span><span class="mark-lab">LAB</span></a>
   <ul>
     <li><a class="link" href="index.html">Index</a></li>
     <li><a class="link active" href="work.html">Work</a></li>
@@ -182,7 +193,7 @@
 <header class="page-head" data-cursor-surface="dark">
   <span class="label">// 142 systems shipped · Vol. 04 archive</span>
   <h1>Selected <em>work</em>,<br/>built in <em>weeks</em>,<br/>still alive <em>now</em>.</h1>
-  <p class="lede">Brand systems generated, refined, and shipped with Lumis. From <em>solo founders</em> with a domain and a thesis, to <em>Series-B teams</em> rebuilding identity at scale. Each system is still in flight &mdash; updating, evolving, earning equity.</p>
+  <p class="lede">Brand systems generated, refined, and shipped with KariotLAB. From <em>solo founders</em> with a domain and a thesis, to <em>Series-B teams</em> rebuilding identity at scale. Each system is still in flight &mdash; updating, evolving, earning equity.</p>
 </header>
 
 <div class="filter-bar">
@@ -205,7 +216,7 @@
     <span class="count">04 systems</span>
   </div>
 
-  <!-- LUMIS:BEGIN work-grid -->
+  <!-- KARIOTLAB:BEGIN work-grid -->
   <a href="case-study.html?slug=north-capital" class="case" data-f="fintech">
     <div class="ph">
       <img src="assets/work/north-capital/cover.jpg" alt="North Capital — quietly opinionated finance for builders." />
@@ -316,7 +327,7 @@
     <p class="brief">Series A · Identity · Patient app · In-clinic surfaces</p>
     <div class="tagline"><span class="t">Health</span><span class="t">Service</span><span class="t">Multi-surface</span></div>
   </a>
-  <!-- LUMIS:END work-grid -->
+  <!-- KARIOTLAB:END work-grid -->
 
 </main>
 
@@ -333,11 +344,11 @@
         <p>Creative intelligence for the next generation of founders. New York · Lisbon · Tokyo.</p>
       </div>
       <div class="col"><h4>Product</h4><ul><li><a href="index.html">Index</a></li><li><a href="work.html">Work</a></li><li><a href="pricing.html">Pricing</a></li><li><a href="manifesto.html">Manifesto</a></li></ul></div>
-      <div class="col"><h4>Studio</h4><ul><li><a href="contact.html">Contact</a></li><li><a href="journal.html">Journal</a></li><li><a href="mailto:jodl.hrs03@gmail.com?subject=Lumis%20press%20request">Press</a></li><li><a href="mailto:jodl.hrs03@gmail.com?subject=Lumis%20careers">Careers</a></li></ul></div>
+      <div class="col"><h4>Studio</h4><ul><li><a href="contact.html">Contact</a></li><li><a href="journal.html">Journal</a></li><li><a href="mailto:jodl.hrs03@gmail.com?subject=KariotLAB%20press%20request">Press</a></li><li><a href="mailto:jodl.hrs03@gmail.com?subject=KariotLAB%20careers">Careers</a></li></ul></div>
       <div class="col"><h4>Elsewhere</h4><ul><li><a href="https://x.com/har_ddy" target="_blank" rel="noopener">X</a></li><li><a href="https://www.instagram.com/jodlxhrs_/" target="_blank" rel="noopener">Instagram</a></li><li><a href="https://github.com/JodLHarDxD" target="_blank" rel="noopener">GitHub</a></li><li><a href="https://www.linkedin.com/in/hriddhish-ranjan-sarkar/" target="_blank" rel="noopener">LinkedIn</a></li><li><a href="https://www.youtube.com/@JodLHrs" target="_blank" rel="noopener">YouTube</a></li></ul></div>
     </div>
     <div class="f-bottom">
-      <span>© 2026 Lumis Studio</span>
+      <span>© 2026 KariotLAB Studio</span>
       <span class="ops"><span class="gdot"></span>System operational · 99.99%</span>
       <span>v4.0.7</span>
     </div>

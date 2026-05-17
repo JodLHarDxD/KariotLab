@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Color theory isn&#39;t enough: emotional architecture — Lumis Journal</title>
+<title>Color theory isn&#39;t enough: emotional architecture — KariotLAB Journal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,700;1,6..72,300;1,6..72,400;1,6..72,700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -28,8 +28,18 @@
   /* NAV */
   .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; padding: 20px 32px; display: flex; justify-content: space-between; align-items: center; backdrop-filter: blur(8px); background: linear-gradient(180deg, rgba(10,9,8,0.6) 0%, rgba(10,9,8,0) 100%); border-bottom: 1px solid transparent; transition: border-color 0.3s, background 0.3s; }
   .nav.scrolled { background: rgba(10,9,8,0.85); border-bottom-color: var(--rule); }
-  .nav .mark { font-family: var(--serif); font-size: 22px; font-style: italic; letter-spacing: -0.02em; color: var(--paper); text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
-  .nav .mark::before { content: ''; width: 8px; height: 8px; background: var(--signal); border-radius: 50%; box-shadow: 0 0 12px var(--signal); animation: pulse 2.4s ease-in-out infinite; }
+  .nav .mark {
+    text-decoration: none; display: inline-flex; align-items: baseline; gap: 0;
+  }
+  .mark-k {
+    font-family: var(--sans); font-weight: 800; font-size: 21px;
+    letter-spacing: -0.04em; color: var(--paper); text-transform: uppercase; line-height: 1;
+  }
+  .mark-lab {
+    font-family: var(--mono); font-weight: 400; font-size: 12px;
+    letter-spacing: 0.24em; color: var(--signal); text-transform: uppercase;
+    line-height: 1; align-self: flex-end; padding-bottom: 2px; padding-left: 2px;
+  }
   .nav ul { list-style: none; display: flex; gap: 28px; }
   .nav a.link { color: var(--paper); text-decoration: none; font-size: 13px; opacity: 0.7; transition: opacity 0.3s; position: relative; letter-spacing: 0.04em; }
   .nav a.link:hover, .nav a.link.active { opacity: 1; }
@@ -91,11 +101,12 @@
 </style>
 </head>
 <body>
+<script src="preloader.js"></script>
 
 <div class="progress-bar" id="progress"></div>
 
 <nav class="nav" id="nav">
-  <a href="../index.html" class="mark">Lumis</a>
+  <a href="../index.html" class="mark"><span class="mark-k">KARIOT</span><span class="mark-lab">LAB</span></a>
   <ul>
     <li><a class="link" href="../index.html">Index</a></li>
     <li><a class="link" href="../work.html">Work</a></li>
@@ -126,7 +137,7 @@
       <div class="avatar">MC</div>
       <div>
         <div class="name">Marcus Chen</div>
-        <div class="role">Lumis Studio</div>
+        <div class="role">KariotLAB Studio</div>
       </div>
     </div>
     <a href="../journal.html" class="back-link">← All essays</a>
@@ -153,7 +164,7 @@
 
 <footer>
   <div class="f-inner">
-    <span class="f-bottom">© 2026 Lumis Studio</span>
+    <span class="f-bottom">© 2026 KariotLAB Studio</span>
     <a href="../journal.html" class="back-link">← Back to Journal</a>
   </div>
 </footer>

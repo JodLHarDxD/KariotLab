@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>The Death of the Logo — Lumis Journal</title>
+<title>The Death of the Logo — KariotLAB Journal</title>
 <meta name="description" content="Static marks served the era of billboards and business cards. In a world of motion, memory, and machine-generated surfaces, brand systems have become the new competitive moat." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -45,8 +45,18 @@
   /* NAV */
   .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; padding: 20px 32px; display: flex; justify-content: space-between; align-items: center; backdrop-filter: blur(8px) saturate(120%); background: linear-gradient(180deg, rgba(10,9,8,0.6) 0%, rgba(10,9,8,0) 100%); border-bottom: 1px solid transparent; transition: border-color 0.3s, background 0.3s; }
   .nav.scrolled { background: rgba(10,9,8,0.85); border-bottom-color: var(--rule); }
-  .nav .mark { font-family: var(--serif); font-size: 22px; font-style: italic; letter-spacing: -0.02em; color: var(--paper); text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
-  .nav .mark::before { content: ''; width: 8px; height: 8px; background: var(--signal); border-radius: 50%; box-shadow: 0 0 12px var(--signal); animation: pulse 2.4s ease-in-out infinite; }
+  .nav .mark {
+    text-decoration: none; display: inline-flex; align-items: baseline; gap: 0;
+  }
+  .mark-k {
+    font-family: var(--sans); font-weight: 800; font-size: 21px;
+    letter-spacing: -0.04em; color: var(--paper); text-transform: uppercase; line-height: 1;
+  }
+  .mark-lab {
+    font-family: var(--mono); font-weight: 400; font-size: 12px;
+    letter-spacing: 0.24em; color: var(--signal); text-transform: uppercase;
+    line-height: 1; align-self: flex-end; padding-bottom: 2px; padding-left: 2px;
+  }
   .nav ul { list-style: none; display: flex; gap: 28px; }
   .nav a.link { color: var(--paper); text-decoration: none; font-size: 13px; font-weight: 400; letter-spacing: 0.04em; opacity: 0.7; transition: opacity 0.3s; position: relative; }
   .nav a.link:hover, .nav a.link.active { opacity: 1; }
@@ -314,6 +324,7 @@
 </style>
 </head>
 <body data-cursor-surface="dark">
+<script src="preloader.js"></script>
 
 <!-- Noise -->
 <svg class="noise" xmlns="http://www.w3.org/2000/svg" width="300" height="300">
@@ -331,7 +342,7 @@
 
 <!-- NAV -->
 <nav class="nav" id="nav">
-  <a href="index.html" class="mark">Lumis</a>
+  <a href="index.html" class="mark"><span class="mark-k">KARIOT</span><span class="mark-lab">LAB</span></a>
   <ul>
     <li><a class="link" href="index.html">Index</a></li>
     <li><a class="link" href="work.html">Work</a></li>
@@ -349,7 +360,7 @@
 <!-- ARTICLE HEADER -->
 <header class="article-header">
   <div class="breadcrumb">
-    <a href="index.html">Lumis</a>
+    <a href="index.html">KariotLAB</a>
     <span class="sep">·</span>
     <a href="journal.html">Journal</a>
     <span class="sep">·</span>
@@ -369,12 +380,12 @@
       <div class="avatar"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=240&q=92" alt="Marcus Chen" /></div>
       <div class="info">
         <div class="name">Marcus Chen</div>
-        <div class="role">Creative Director, Lumis</div>
+        <div class="role">Creative Director, KariotLAB</div>
       </div>
     </div>
     <div class="share">
       <button onclick="navigator.clipboard.writeText(location.href); this.textContent='Copied!'">Copy link</button>
-      <button onclick="window.open('https://x.com/intent/tweet?url=' + encodeURIComponent(location.href) + '&text=' + encodeURIComponent('The Death of the Logo - Lumis Journal'), '_blank', 'noopener')">Share on X</button>
+      <button onclick="window.open('https://x.com/intent/tweet?url=' + encodeURIComponent(location.href) + '&text=' + encodeURIComponent('The Death of the Logo - KariotLAB Journal'), '_blank', 'noopener')">Share on X</button>
     </div>
   </div>
 </header>
@@ -384,7 +395,7 @@
   <figure id="hero-fig">
     <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=2200&q=95" alt="Brand systems in the age of motion" loading="eager" decoding="async" />
   </figure>
-  <figcaption>Graphic: Lumis Studio · A system in motion replaces the static mark</figcaption>
+  <figcaption>Graphic: KariotLAB Studio · A system in motion replaces the static mark</figcaption>
 </div>
 
 <!-- ARTICLE BODY -->
@@ -430,7 +441,7 @@
 
     <div class="pullquote">
       <blockquote>"A brand is not a logo. It is a set of promises kept consistently across time. The logo is just the abbreviation — and abbreviations lose meaning when nobody reads the original text."</blockquote>
-      <div class="attribution">— Marcus Chen · Lumis Studio</div>
+      <div class="attribution">— Marcus Chen · KariotLAB Studio</div>
     </div>
 
     <h2 id="surfaces">The infinite surface problem</h2>
@@ -482,18 +493,18 @@
 
     <div class="pullquote">
       <blockquote>"The test of a brand system is not whether it looks good on a brand guidelines PDF. It is whether a new team member, shown only the system rules and no examples, can produce work that looks undeniably like yours."</blockquote>
-      <div class="attribution">— Lumis Methodology · Chapter 4</div>
+      <div class="attribution">— KariotLAB Methodology · Chapter 4</div>
     </div>
 
     <h2 id="evidence">The evidence</h2>
 
-    <p>We audited 200 companies in the Lumis database — a mix of venture-backed startups, bootstrapped SaaS, and established brands — across five years of output. The finding was stark: companies with coherent brand systems (defined as: consistent motion behavior, typographic fingerprint, and color deployment rules that operate independently of the logo) commanded a <em>4.2× premium on brand recognition</em> in blind recall tests versus companies whose brand identity was primarily expressed through their mark.</p>
+    <p>We audited 200 companies in the KariotLAB database — a mix of venture-backed startups, bootstrapped SaaS, and established brands — across five years of output. The finding was stark: companies with coherent brand systems (defined as: consistent motion behavior, typographic fingerprint, and color deployment rules that operate independently of the logo) commanded a <em>4.2× premium on brand recognition</em> in blind recall tests versus companies whose brand identity was primarily expressed through their mark.</p>
 
     <p>More importantly, companies with systems aged better. The average rebrand cycle for companies with strong systems was 6.2 years. For logo-primary companies, it was 18 months. The logo ages. The system evolves.</p>
 
     <h2 id="build">How to build one</h2>
 
-    <p>The process Lumis uses with founders is called the <em>System Before Mark</em> method. The logo comes last. The system comes first. Before a single vector is drawn, the team works through four foundational decisions:</p>
+    <p>The process KariotLAB uses with founders is called the <em>System Before Mark</em> method. The logo comes last. The system comes first. Before a single vector is drawn, the team works through four foundational decisions:</p>
 
     <p><strong>1. The density rule.</strong> How much space does this brand take up? Does it fill its container or float in it? This single decision governs page layout, copy length, imagery density, and UI component spacing.</p>
 
@@ -526,8 +537,8 @@
     <div class="info">
       <span class="label">// Author</span>
       <div class="name">Marcus Chen</div>
-      <div class="role">Creative Director · Lumis Studio</div>
-      <p class="bio">Marcus has spent fifteen years building brand systems for companies at every stage — from pre-seed to post-IPO. Before Lumis, he led brand at three YC companies and spent four years as ECD at a London design studio. He writes occasionally and thinks constantly about the relationship between type, motion, and memory.</p>
+      <div class="role">Creative Director · KariotLAB Studio</div>
+      <p class="bio">Marcus has spent fifteen years building brand systems for companies at every stage — from pre-seed to post-IPO. Before KariotLAB, he led brand at three YC companies and spent four years as ECD at a London design studio. He writes occasionally and thinks constantly about the relationship between type, motion, and memory.</p>
     </div>
   </div>
   <div class="spacer"></div>
@@ -577,7 +588,7 @@
 <div class="cta-strip">
   <span class="eyebrow">// Start building</span>
   <h2>Your brand deserves a <em>system, not a mark</em></h2>
-  <p>Join 247 founders who are building iconic brands with Lumis — strategy, identity, and a living system, in hours instead of months.</p>
+  <p>Join 247 founders who are building iconic brands with KariotLAB — strategy, identity, and a living system, in hours instead of months.</p>
   <div class="actions">
     <a href="contact.html" class="btn-primary">
       Start building
@@ -594,7 +605,7 @@
       <div class="col-1">
         <span class="label">// The studio</span>
         <p>Creative intelligence for the next generation of founders. New York · Lisbon · Tokyo. Currently in private beta.</p>
-        <form class="signup" onsubmit="event.preventDefault();const e=this.querySelector('input').value.trim();location.href='mailto:jodl.hrs03@gmail.com?subject=Lumis%20dispatch%20signup&body='+encodeURIComponent('Subscribe this email: '+e);this.querySelector('button').textContent='Email opened';">
+        <form class="signup" onsubmit="event.preventDefault();const e=this.querySelector('input').value.trim();location.href='mailto:jodl.hrs03@gmail.com?subject=KariotLAB%20dispatch%20signup&body='+encodeURIComponent('Subscribe this email: '+e);this.querySelector('button').textContent='Email opened';">
           <input type="email" placeholder="hello@yourcompany.com" required />
           <button type="submit">Subscribe</button>
         </form>
@@ -612,8 +623,8 @@
         <h4>Studio</h4>
         <ul>
           <li><a href="contact.html">Contact</a></li>
-          <li><a href="mailto:jodl.hrs03@gmail.com?subject=Lumis%20press%20request">Press kit</a></li>
-          <li><a href="mailto:jodl.hrs03@gmail.com?subject=Lumis%20careers">Careers</a></li>
+          <li><a href="mailto:jodl.hrs03@gmail.com?subject=KariotLAB%20press%20request">Press kit</a></li>
+          <li><a href="mailto:jodl.hrs03@gmail.com?subject=KariotLAB%20careers">Careers</a></li>
           <li><a href="work.html">Brand archive</a></li>
         </ul>
       </div>
@@ -638,7 +649,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2026 Lumis Studio · All rights reserved</span>
+      <span>© 2026 KariotLAB Studio · All rights reserved</span>
       <span class="ops"><span class="gdot"></span>System operational · 99.99% uptime · Last incident: never</span>
       <span>v4.0.7 · Built in motion</span>
     </div>

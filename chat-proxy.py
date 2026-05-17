@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Lumis chatbot proxy server.
+"""KariotLAB chatbot proxy server.
 
 Run:  python chat-proxy.py
 Serves:
@@ -28,13 +28,13 @@ _INDEX_PATH = ROOT / "content_index.json"
 if _INDEX_PATH.is_file():
     _INDEX = json.loads(_INDEX_PATH.read_text(encoding="utf-8"))
 
-SYSTEM_PROMPT = f"""You are the Lumis Studio AI assistant. Lumis builds brand systems for ambitious founders and growing teams.
+SYSTEM_PROMPT = f"""You are the KariotLAB Studio AI assistant. KariotLAB builds brand systems for ambitious founders and growing teams.
 
 Answer questions about the studio's work, pricing, team, and journal essays.
 Keep answers concise (2-4 sentences). For project inquiries, direct to contact.html.
 Never make up case studies or pricing not listed below.
 
---- LUMIS CONTENT ---
+--- KARIOTLAB CONTENT ---
 WORK (10 case studies): North Capital (Fintech/B2B, Series A), Atelier Vesta (D2C Beauty, Pre-seed),
 Hum (B2B Dev tools, Series Seed), Casa Lume (Hospitality, 9 properties), Slow (Health D2C),
 Selected (D2C Coffee), Brick (B2B SaaS), Field Notes (Creative tools), Vesper (D2C Apparel),
@@ -99,7 +99,7 @@ def call_llm(messages: list[dict]) -> str:
             "Content-Type":  "application/json",
             "Authorization": f"Bearer {api_key}",
             "HTTP-Referer":  "http://localhost",
-            "X-Title":       "Lumis Studio",
+            "X-Title":       "KariotLAB Studio",
         },
         method="POST",
     )
@@ -184,7 +184,7 @@ class Handler(BaseHTTPRequestHandler):
 
 if __name__ == "__main__":
     server = HTTPServer(("", PORT), Handler)
-    print(f"Lumis dev server → http://localhost:{PORT}")
+    print(f"KariotLAB dev server → http://localhost:{PORT}")
     print(f"  API key:  {'set ✓' if _get_api_key() else 'NOT SET — set OPENROUTER_API_KEY'}")
     print(f"  Model:    {MODEL}")
     print(f"  Content:  {len(_INDEX)} records loaded from content_index.json")
