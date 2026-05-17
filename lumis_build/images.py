@@ -13,12 +13,18 @@ def process_image(src: Path, dst: Path, *, max_width: int, quality: int) -> None
     same-path call with different max_width/quality will return stale output.
     Filesystem mtime resolution caps cache precision (~10ms on NTFS, 2s on FAT32).
     """
-    if dst.is_file() and dst.stat().st_mtime_ns >= src.stat().st_mtime_ns:
-        return
     dst.parent.mkdir(parents=True, exist_ok=True)
     with Image.open(src) as im:
         im = im.convert("RGB")
         w, h = im.size
+        target_w = min(w, max_width)
+        if dst.is_file() and dst.stat().st_mtime_ns >= src.stat().st_mtime_ns:
+            try:
+                with Image.open(dst) as cached:
+                    if cached.size[0] >= target_w:
+                        return
+            except OSError:
+                pass
         if w > max_width:
             new_h = round(h * (max_width / w))
             im = im.resize((max_width, new_h), Image.LANCZOS)

@@ -54,54 +54,62 @@ color theory as emotional architecture, founder brand systems, client collaborat
 typography for category leaders.
 ---"""
 
-ANTHROPIC_API_URL = "https://api.anthropic.com/v1/messages"
-MODEL = "claude-haiku-4-5-20251001"
+OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
+# Free OpenRouter models (suffix :free). Override via MODEL env var.
+# Tested working 2026-05-07: openai/gpt-oss-120b:free, openai/gpt-oss-20b:free,
+# openrouter/free (auto-routed). Many other :free models hit upstream rate limits.
+MODEL = os.environ.get("MODEL", "openai/gpt-oss-120b:free")
 MAX_TOKENS = 512
 
 
 def _get_api_key() -> str:
-    key = os.environ.get("ANTHROPIC_API_KEY", "")
-    if not key:
-        env_file = ROOT / ".env"
-        if env_file.is_file():
-            for line in env_file.read_text(encoding="utf-8").splitlines():
-                if line.startswith("ANTHROPIC_API_KEY="):
-                    key = line.split("=", 1)[1].strip().strip('"').strip("'")
-    return key
+    for var in ("OPENROUTER_API_KEY", "OPENAI_API_KEY"):
+        key = os.environ.get(var, "")
+        if key:
+            return key
+    env_file = ROOT / ".env"
+    if env_file.is_file():
+        for line in env_file.read_text(encoding="utf-8").splitlines():
+            for prefix in ("OPENROUTER_API_KEY=", "OPENAI_API_KEY="):
+                if line.startswith(prefix):
+                    return line.split("=", 1)[1].strip().strip('"').strip("'")
+    return ""
 
 
-def call_anthropic(messages: list[dict]) -> str:
+def call_llm(messages: list[dict]) -> str:
     api_key = _get_api_key()
     if not api_key:
         return (
-            "API key not configured. Set ANTHROPIC_API_KEY in your environment "
-            "or create a .env file with ANTHROPIC_API_KEY=your_key_here"
+            "API key not configured. Set OPENROUTER_API_KEY in your environment "
+            "or create a .env file with OPENROUTER_API_KEY=your_key_here"
         )
+
+    full_messages = [{"role": "system", "content": SYSTEM_PROMPT}] + messages[-6:]
 
     payload = json.dumps({
         "model": MODEL,
         "max_tokens": MAX_TOKENS,
-        "system": SYSTEM_PROMPT,
-        "messages": messages[-6:],  # last 6 messages to cap tokens
+        "messages": full_messages,
     }).encode("utf-8")
 
     req = urllib.request.Request(
-        ANTHROPIC_API_URL,
+        OPENROUTER_API_URL,
         data=payload,
         headers={
-            "Content-Type":            "application/json",
-            "x-api-key":               api_key,
-            "anthropic-version":       "2023-06-01",
+            "Content-Type":  "application/json",
+            "Authorization": f"Bearer {api_key}",
+            "HTTP-Referer":  "http://localhost",
+            "X-Title":       "Lumis Studio",
         },
         method="POST",
     )
     try:
-        with urllib.request.urlopen(req, timeout=30) as r:
+        with urllib.request.urlopen(req, timeout=60) as r:
             data = json.loads(r.read())
-            return data["content"][0]["text"]
+            return data["choices"][0]["message"]["content"]
     except urllib.error.HTTPError as e:
         body = e.read().decode("utf-8", errors="replace")
-        return f"Anthropic API error {e.code}: {body[:200]}"
+        return f"OpenRouter API error {e.code}: {body[:300]}"
     except Exception as e:
         return f"Error: {e}"
 
@@ -145,7 +153,7 @@ class Handler(BaseHTTPRequestHandler):
         length = int(self.headers.get("Content-Length", 0))
         body   = json.loads(self.rfile.read(length))
         msgs   = body.get("messages", [])
-        reply  = call_anthropic(msgs)
+        reply  = call_llm(msgs)
         payload = json.dumps({"reply": reply}, ensure_ascii=False).encode("utf-8")
         self.send_response(200)
         self.send_header("Content-Type",   "application/json")
@@ -177,7 +185,8 @@ class Handler(BaseHTTPRequestHandler):
 if __name__ == "__main__":
     server = HTTPServer(("", PORT), Handler)
     print(f"Lumis dev server → http://localhost:{PORT}")
-    print(f"  API key:  {'set ✓' if _get_api_key() else 'NOT SET — set ANTHROPIC_API_KEY'}")
+    print(f"  API key:  {'set ✓' if _get_api_key() else 'NOT SET — set OPENROUTER_API_KEY'}")
+    print(f"  Model:    {MODEL}")
     print(f"  Content:  {len(_INDEX)} records loaded from content_index.json")
     print("  Press Ctrl-C to stop\n")
     try:

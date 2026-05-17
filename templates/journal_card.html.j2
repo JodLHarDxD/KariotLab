@@ -1,16 +1,18 @@
-{#- Inputs: item.slug, item.meta {title, category, date_display, read_time, author, author_img}, item.image_url -#}
-<a href="journal/{{ item.slug }}.html" class="article">
-  <div class="ph"><img src="{{ item.image_url }}" alt="{{ item.meta.title }}" loading="lazy" /></div>
-  <div class="meta">
-    <span class="cat">{{ item.meta.category }}</span>
-    <span class="dot">·</span>
-    <span class="date">{{ item.meta.date_display }}</span>
-    <span class="dot">·</span>
-    <span class="read">{{ item.meta.read_time }} min read</span>
+{#- Inputs: item.slug, item.meta {title, category, date_display, read_time, author}, item.image_url, item.col_class, item.author_img_url -#}
+<a href="journal/{{ item.slug }}.html" class="article" data-cat="{{ item.meta.category|lower|replace(' ', '-') }}">
+  <div class="thumb">
+    <img src="{{ item.image_url }}" alt="{{ item.meta.title }}" loading="lazy" decoding="async" sizes="(max-width: 640px) calc(100vw - 40px), (max-width: 1024px) 42vw, 34vw" />
+    <span class="cat-badge">{{ item.meta.category }}</span>
   </div>
-  <h3>{{ item.meta.title }}</h3>
-  <div class="byline">
-    <div class="ava"><img src="{{ item.author_img_url }}" alt="{{ item.meta.author }}" /></div>
-    <span>{{ item.meta.author }}</span>
+  <div class="body">
+    <div class="row">
+      <span class="date">{{ item.meta.date_display }}</span>
+      <span class="rt">{{ item.meta.read_time }} min read</span>
+    </div>
+    <h3>{{ item.meta.title }}</h3>
+    <div class="author-row">
+      <div class="ava">{% set _p = item.meta.author.split() %}{{ _p[0][0] }}{{ _p[1][0] if _p|length > 1 else '' }}</div>
+      <span class="an">{{ item.meta.author }}</span>
+    </div>
   </div>
 </a>

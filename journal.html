@@ -112,8 +112,8 @@
     background: var(--ink-2); position: relative; min-height: 520px;
     overflow: hidden;
   }
-  .featured-card .img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s cubic-bezier(0.22,1,0.36,1), filter 0.6s; filter: saturate(0.7) brightness(0.85); }
-  .featured-card:hover .img img { transform: scale(1.04); filter: saturate(1) brightness(0.95); }
+  .featured-card .img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s cubic-bezier(0.22,1,0.36,1), filter 0.6s; filter: saturate(1.04) contrast(1.03) brightness(1); }
+  .featured-card:hover .img img { transform: scale(1.025); filter: saturate(1.08) contrast(1.04) brightness(1.02); }
   .featured-card .img .overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,77,46,0.12) 0%, transparent 60%); }
   .featured-card .img .badge {
     position: absolute; top: 24px; left: 24px;
@@ -144,7 +144,7 @@
   }
   .featured-card .body .author { display: flex; align-items: center; gap: 14px; }
   .featured-card .body .author .avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--ink-3); border: 1px solid var(--rule-2); overflow: hidden; }
-  .featured-card .body .author .avatar img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(0.4); }
+  .featured-card .body .author .avatar img { width: 100%; height: 100%; object-fit: cover; }
   .featured-card .body .author .info .name { font-size: 13px; font-weight: 500; }
   .featured-card .body .author .info .role { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; opacity: 0.5; text-transform: uppercase; margin-top: 2px; }
   .featured-card .body .read-link {
@@ -156,60 +156,105 @@
   .featured-card .body .read-link svg { transition: transform 0.3s; }
   .featured-card:hover .body .read-link svg { transform: translate(3px, -3px); }
 
-  /* ARTICLE GRID */
-  .article-grid {
-    max-width: 1440px; margin: 0 auto; padding: 0 32px 80px;
-    display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px;
+  /* JOURNAL RAIL — vertical scroll driven horizontal gallery */
+  .journal-rail-outer {
+    --rail-pad: max(32px, calc((100vw - 1440px) / 2 + 32px));
+    --rail-scroll-span: 1200px;
+    min-height: calc(100vh + var(--rail-scroll-span));
+    padding: 0 0 120px;
+    position: relative;
   }
+  .journal-rail {
+    position: sticky; top: clamp(88px, 11vh, 128px);
+    display: flex; gap: clamp(72px, 9vw, 144px); overflow-x: auto; overflow-y: hidden;
+    scrollbar-width: none; -ms-overflow-style: none;
+    cursor: grab; padding: 8px var(--rail-pad) 36px; user-select: none;
+    scroll-snap-type: none;
+    scroll-padding-left: var(--rail-pad);
+    scroll-behavior: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    mask-image: linear-gradient(90deg, transparent 0, #000 56px, #000 calc(100% - 56px), transparent 100%);
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 56px, #000 calc(100% - 56px), transparent 100%);
+  }
+  .journal-rail::-webkit-scrollbar { display: none; }
+  .journal-rail.dragging { cursor: grabbing; scroll-behavior: auto; }
+  .journal-rail.dragging, .journal-rail:focus-visible { scroll-snap-type: x proximity; }
 
-  .article { text-decoration: none; color: inherit; cursor: pointer; }
-  .article .thumb {
-    border-radius: 16px; overflow: hidden; border: 1px solid var(--rule);
-    position: relative; background: var(--ink-2);
+  .article {
+    flex: 0 0 clamp(640px, 58vw, 820px); width: clamp(640px, 58vw, 820px);
+    display: grid; grid-template-columns: minmax(300px, 0.92fr) minmax(240px, 0.58fr);
+    align-items: center; column-gap: clamp(56px, 7vw, 112px);
+    text-decoration: none; color: inherit;
+    scroll-snap-align: start;
+    opacity: 0.82;
+    transition: transform 400ms cubic-bezier(0.4,0,0.2,1), opacity 400ms cubic-bezier(0.4,0,0.2,1), box-shadow 200ms ease-out;
+    will-change: transform;
   }
-  .article .thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s cubic-bezier(0.22,1,0.36,1), filter 0.6s; filter: saturate(0.75) brightness(0.88); display: block; }
-  .article:hover .thumb img { transform: scale(1.05); filter: saturate(1) brightness(0.95); }
+  .article:hover { transform: translateY(-6px); }
+  .journal-rail.has-active .article { opacity: 0.42; }
+  .journal-rail.has-active .article.is-active { opacity: 1; transform: scale(1.012); }
+  .article .thumb {
+    aspect-ratio: 4/5; overflow: hidden; border-radius: 0;
+    border: 1px solid var(--rule); position: relative; background: var(--ink-2);
+    transition: border-color 200ms ease-out, box-shadow 200ms ease-out;
+  }
+  .article.is-active .thumb { border-color: rgba(255,184,159,0.42); }
+  .article:hover .thumb { border-color: rgba(242,235,218,0.22); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+  .article .thumb img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 900ms cubic-bezier(0.22,1,0.36,1), filter 700ms;
+    filter: saturate(1.02) contrast(1.04) brightness(0.98);
+    display: block; pointer-events: none;
+    image-rendering: auto;
+  }
+  .article:hover .thumb img, .article.is-active .thumb img { transform: scale(1.025); filter: saturate(1.08) contrast(1.05) brightness(1); }
   .article .thumb .cat-badge {
     position: absolute; top: 16px; left: 16px;
     font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
     color: var(--paper); background: rgba(10,9,8,0.65); backdrop-filter: blur(6px);
     padding: 5px 12px; border-radius: 999px; border: 1px solid var(--rule-2);
   }
-  .article .body { padding: 24px 4px 0; }
-  .article .body .row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-  .article .body .row .date { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.4; }
-  .article .body .row .rt { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; opacity: 0.4; }
-  .article .body h3 { font-family: var(--serif); font-weight: 400; font-size: clamp(20px, 2vw, 30px); line-height: 1.12; letter-spacing: -0.02em; }
+  .article .body {
+    min-height: min(380px, 62vh);
+    padding: clamp(18px, 3vw, 36px) 0;
+    display: flex; flex-direction: column; justify-content: center;
+    position: relative;
+  }
+  .article .body::before {
+    content: ''; position: absolute; left: 0; top: 0; width: 1px; height: 100%;
+    background: linear-gradient(180deg, transparent, rgba(242,235,218,0.22), transparent);
+  }
+  .article .body .row {
+    order: 3; display: flex; justify-content: space-between; align-items: center; gap: 24px;
+    margin-top: clamp(28px, 3vw, 44px); padding-left: clamp(24px, 3vw, 42px);
+  }
+  .article .body .row .date { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.42; }
+  .article .body .row .rt { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; opacity: 0.42; white-space: nowrap; }
+  .article .body h3 {
+    order: 2; padding-left: clamp(24px, 3vw, 42px);
+    font-family: var(--serif); font-weight: 300; font-size: clamp(30px, 3.1vw, 58px);
+    line-height: 0.98; letter-spacing: -0.035em; transition: color 0.3s;
+  }
   .article .body h3 em { font-style: italic; color: var(--signal-soft); transition: color 0.3s; }
   .article:hover .body h3 em { color: var(--signal); }
-  .article .body .excerpt { font-family: var(--serif); font-style: italic; font-weight: 300; font-size: 14px; line-height: 1.5; opacity: 0.65; margin-top: 10px; }
-  .article .body .author-row { margin-top: 20px; display: flex; align-items: center; gap: 10px; }
-  .article .body .author-row .ava { width: 28px; height: 28px; border-radius: 50%; background: var(--ink-3); border: 1px solid var(--rule); overflow: hidden; }
-  .article .body .author-row .ava img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(0.3); }
-  .article .body .author-row .an { font-size: 12px; font-weight: 500; opacity: 0.75; }
-
-  /* grid spans */
-  .article.col-5 { grid-column: span 5; }
-  .article.col-4 { grid-column: span 4; }
-  .article.col-7 { grid-column: span 7; }
-  .article.col-6 { grid-column: span 6; }
-  .article.col-3 { grid-column: span 3; }
-  .article.col-8 { grid-column: span 8; }
-
-  .article.col-5 .thumb { aspect-ratio: 4/3; }
-  .article.col-4 .thumb { aspect-ratio: 3/4; }
-  .article.col-7 .thumb { aspect-ratio: 16/9; }
-  .article.col-6 .thumb { aspect-ratio: 3/2; }
-  .article.col-3 .thumb { aspect-ratio: 1; }
-  .article.col-8 .thumb { aspect-ratio: 21/9; }
-
-  /* YEAR DIVIDER */
-  .year-div {
-    grid-column: span 12; display: flex; align-items: center; gap: 24px;
-    padding: 40px 0 20px;
+  .article .body .author-row {
+    order: 1; margin-bottom: clamp(26px, 3vw, 48px); padding-left: clamp(24px, 3vw, 42px);
+    display: grid; grid-template-columns: 44px minmax(0, 1fr); align-items: center; gap: 14px;
   }
-  .year-div span { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.35; white-space: nowrap; }
-  .year-div::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+  .article .body .author-row::before {
+    content: 'Profile'; grid-column: 2; grid-row: 1;
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--signal); transform: translateY(-18px);
+  }
+  .article .body .author-row .ava {
+    grid-column: 1; grid-row: 1 / span 2;
+    width: 44px; height: 44px; border-radius: 50%;
+    background: linear-gradient(135deg, rgba(255,77,46,0.18) 0%, rgba(201,164,103,0.12) 100%);
+    border: 1px solid var(--rule-2); display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.04em; color: var(--signal-soft); flex-shrink: 0;
+  }
+  .article .body .author-row .an { grid-column: 2; grid-row: 1; font-size: 14px; font-weight: 500; opacity: 0.9; align-self: end; }
 
   /* NEWSLETTER STRIP */
   .newsletter {
@@ -264,27 +309,47 @@
   .word-mask span { display: inline-block; }
   @keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-  /* HOVER LINES */
-  .article:hover { }
-  .article .body h3 { transition: color 0.3s; }
-
   @media (max-width: 1024px) {
     .page-head { grid-template-columns: 1fr; gap: 40px; }
     .featured-card { grid-template-columns: 1fr; }
     .featured-card .img { min-height: 320px; }
-    .article.col-5, .article.col-7, .article.col-4, .article.col-3 { grid-column: span 6; }
-    .article.col-8 { grid-column: span 12; }
+    .journal-rail-outer { --rail-pad: 32px; }
+    .journal-rail { gap: 64px; padding: 0 var(--rail-pad) 28px; }
+    .article {
+      flex-basis: min(720px, calc(100vw - 64px)); width: min(720px, calc(100vw - 64px));
+      grid-template-columns: minmax(280px, 0.9fr) minmax(220px, 0.65fr);
+      column-gap: 44px;
+    }
+    .article .body h3 { font-size: clamp(28px, 4.6vw, 46px); }
     .newsletter-inner { grid-template-columns: 1fr; gap: 40px; padding: 48px; }
     .footer-grid { grid-template-columns: 1fr 1fr; }
   }
   @media (max-width: 640px) {
     .page-head { padding: 140px 20px 60px; }
-    .filter-bar, .featured, .article-grid, .newsletter { padding-left: 20px; padding-right: 20px; }
+    .filter-bar, .featured, .newsletter { padding-left: 20px; padding-right: 20px; }
     .featured-card { border-radius: 16px; }
     .featured-card .body { padding: 36px 28px; }
-    .article.col-5, .article.col-7, .article.col-4, .article.col-3, .article.col-6, .article.col-8 { grid-column: span 12; }
+    .journal-rail-outer { --rail-pad: 20px; }
+    .journal-rail { top: 88px; gap: 44px; padding: 0 var(--rail-pad) 24px; mask-image: none; -webkit-mask-image: none; }
+    .article {
+      flex-basis: calc(100vw - 40px); width: calc(100vw - 40px);
+      grid-template-columns: 1fr; row-gap: 28px;
+    }
+    .article .thumb { aspect-ratio: 4/5; }
+    .article .body { min-height: auto; padding: 0 0 12px; }
+    .article .body::before { display: none; }
+    .article .body .author-row,
+    .article .body h3,
+    .article .body .row { padding-left: 0; }
+    .article .body h3 { font-size: clamp(30px, 10vw, 42px); }
     .newsletter-inner { padding: 32px 24px; }
     .footer-grid { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .journal-rail-outer { min-height: auto; padding-bottom: 80px; }
+    .journal-rail { position: relative; top: auto; scroll-snap-type: x mandatory; }
+    .journal-rail.has-active .article { opacity: 0.86; }
+    .journal-rail.has-active .article.is-active { transform: none; }
   }
 </style>
 </head>
@@ -362,7 +427,7 @@
 <div class="featured">
   <a href="journal-article.html" class="featured-card" data-cat="branding">
     <div class="img">
-      <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80" alt="The Death of the Logo" loading="lazy" />
+      <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1800&q=92" alt="The Death of the Logo" loading="lazy" decoding="async" />
       <div class="overlay"></div>
       <span class="badge">✦ Featured essay</span>
     </div>
@@ -380,7 +445,7 @@
       </div>
       <div class="foot">
         <div class="author">
-          <div class="avatar"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&q=80" alt="Marcus Chen" /></div>
+          <div class="avatar"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=180&q=90" alt="Marcus Chen" /></div>
           <div class="info">
             <div class="name">Marcus Chen</div>
             <div class="role">Creative Director</div>
@@ -395,117 +460,133 @@
   </a>
 </div>
 
-<!-- ARTICLE GRID -->
-<div class="article-grid" id="article-grid">
+<!-- JOURNAL RAIL -->
+<div class="journal-rail-outer" id="journalRailSection">
+<div class="journal-rail" id="journalRail" tabindex="0" aria-label="Journal essays">
 
   <!-- LUMIS:BEGIN journal-grid -->
-  <a href="journal/what-ycs-top-brands-have-in-common.html" class="article">
-    <div class="ph"><img src="assets/journal/what-ycs-top-brands-have-in-common/cover.jpg" alt="What YC&#39;s top brands have in common" loading="lazy" /></div>
-    <div class="meta">
-      <span class="cat">Founders</span>
-      <span class="dot">·</span>
-      <span class="date">Apr 10, 2026</span>
-      <span class="dot">·</span>
-      <span class="read">8 min read</span>
+  <a href="journal/what-ycs-top-brands-have-in-common.html" class="article" data-cat="founders">
+    <div class="thumb">
+      <img src="assets/journal/what-ycs-top-brands-have-in-common/cover.jpg" alt="What YC&#39;s top brands have in common" loading="lazy" decoding="async" sizes="(max-width: 640px) calc(100vw - 40px), (max-width: 1024px) 42vw, 34vw" />
+      <span class="cat-badge">Founders</span>
     </div>
-    <h3>What YC&#39;s top brands have in common</h3>
-    <div class="byline">
-      <div class="ava"><img src="" alt="Sena Adusei" /></div>
-      <span>Sena Adusei</span>
-    </div>
-  </a>
-  <a href="journal/the-48-hour-brand-sprint-what-we-learned-from-200-sessions.html" class="article">
-    <div class="ph"><img src="assets/journal/the-48-hour-brand-sprint-what-we-learned-from-200-sessions/cover.jpg" alt="The 48-hour brand sprint: what we learned from 200 sessions" loading="lazy" /></div>
-    <div class="meta">
-      <span class="cat">Process</span>
-      <span class="dot">·</span>
-      <span class="date">Mar 28, 2026</span>
-      <span class="dot">·</span>
-      <span class="read">10 min read</span>
-    </div>
-    <h3>The 48-hour brand sprint: what we learned from 200 sessions</h3>
-    <div class="byline">
-      <div class="ava"><img src="" alt="Marcus Chen" /></div>
-      <span>Marcus Chen</span>
+    <div class="body">
+      <div class="row">
+        <span class="date">Apr 10, 2026</span>
+        <span class="rt">8 min read</span>
+      </div>
+      <h3>What YC&#39;s top brands have in common</h3>
+      <div class="author-row">
+        <div class="ava">SA</div>
+        <span class="an">Sena Adusei</span>
+      </div>
     </div>
   </a>
-  <a href="journal/why-italics-are-having-a-moment.html" class="article">
-    <div class="ph"><img src="assets/journal/why-italics-are-having-a-moment/cover.jpg" alt="Why italics are having a moment" loading="lazy" /></div>
-    <div class="meta">
-      <span class="cat">Culture</span>
-      <span class="dot">·</span>
-      <span class="date">Mar 14, 2026</span>
-      <span class="dot">·</span>
-      <span class="read">5 min read</span>
+  <a href="journal/the-48-hour-brand-sprint-what-we-learned-from-200-sessions.html" class="article" data-cat="process">
+    <div class="thumb">
+      <img src="assets/journal/the-48-hour-brand-sprint-what-we-learned-from-200-sessions/cover.jpg" alt="The 48-hour brand sprint: what we learned from 200 sessions" loading="lazy" decoding="async" sizes="(max-width: 640px) calc(100vw - 40px), (max-width: 1024px) 42vw, 34vw" />
+      <span class="cat-badge">Process</span>
     </div>
-    <h3>Why italics are having a moment</h3>
-    <div class="byline">
-      <div class="ava"><img src="" alt="Yuki Tanaka" /></div>
-      <span>Yuki Tanaka</span>
-    </div>
-  </a>
-  <a href="journal/color-theory-isnt-enough-emotional-architecture.html" class="article">
-    <div class="ph"><img src="assets/journal/color-theory-isnt-enough-emotional-architecture/cover.jpg" alt="Color theory isn&#39;t enough: emotional architecture" loading="lazy" /></div>
-    <div class="meta">
-      <span class="cat">Branding</span>
-      <span class="dot">·</span>
-      <span class="date">Feb 27, 2026</span>
-      <span class="dot">·</span>
-      <span class="read">9 min read</span>
-    </div>
-    <h3>Color theory isn&#39;t enough: emotional architecture</h3>
-    <div class="byline">
-      <div class="ava"><img src="" alt="Marcus Chen" /></div>
-      <span>Marcus Chen</span>
+    <div class="body">
+      <div class="row">
+        <span class="date">Mar 28, 2026</span>
+        <span class="rt">10 min read</span>
+      </div>
+      <h3>The 48-hour brand sprint: what we learned from 200 sessions</h3>
+      <div class="author-row">
+        <div class="ava">MC</div>
+        <span class="an">Marcus Chen</span>
+      </div>
     </div>
   </a>
-  <a href="journal/founders-dont-need-agencies-they-need-systems.html" class="article">
-    <div class="ph"><img src="assets/journal/founders-dont-need-agencies-they-need-systems/cover.jpg" alt="Founders don&#39;t need agencies. They need systems." loading="lazy" /></div>
-    <div class="meta">
-      <span class="cat">Founders</span>
-      <span class="dot">·</span>
-      <span class="date">Feb 12, 2026</span>
-      <span class="dot">·</span>
-      <span class="read">7 min read</span>
+  <a href="journal/why-italics-are-having-a-moment.html" class="article" data-cat="culture">
+    <div class="thumb">
+      <img src="assets/journal/why-italics-are-having-a-moment/cover.jpg" alt="Why italics are having a moment" loading="lazy" decoding="async" sizes="(max-width: 640px) calc(100vw - 40px), (max-width: 1024px) 42vw, 34vw" />
+      <span class="cat-badge">Culture</span>
     </div>
-    <h3>Founders don&#39;t need agencies. They need systems.</h3>
-    <div class="byline">
-      <div class="ava"><img src="" alt="Amara Diallo" /></div>
-      <span>Amara Diallo</span>
-    </div>
-  </a>
-  <a href="journal/the-brief-that-changed-everything-on-client-collaboration.html" class="article">
-    <div class="ph"><img src="assets/journal/the-brief-that-changed-everything-on-client-collaboration/cover.jpg" alt="The brief that changed everything: on client collaboration" loading="lazy" /></div>
-    <div class="meta">
-      <span class="cat">Process</span>
-      <span class="dot">·</span>
-      <span class="date">Dec 8, 2025</span>
-      <span class="dot">·</span>
-      <span class="read">14 min read</span>
-    </div>
-    <h3>The brief that changed everything: on client collaboration</h3>
-    <div class="byline">
-      <div class="ava"><img src="" alt="Sena Adusei" /></div>
-      <span>Sena Adusei</span>
+    <div class="body">
+      <div class="row">
+        <span class="date">Mar 14, 2026</span>
+        <span class="rt">5 min read</span>
+      </div>
+      <h3>Why italics are having a moment</h3>
+      <div class="author-row">
+        <div class="ava">YT</div>
+        <span class="an">Yuki Tanaka</span>
+      </div>
     </div>
   </a>
-  <a href="journal/five-typography-choices-that-built-category-leaders.html" class="article">
-    <div class="ph"><img src="assets/journal/five-typography-choices-that-built-category-leaders/cover.jpg" alt="Five typography choices that built category leaders" loading="lazy" /></div>
-    <div class="meta">
-      <span class="cat">Culture</span>
-      <span class="dot">·</span>
-      <span class="date">Nov 19, 2025</span>
-      <span class="dot">·</span>
-      <span class="read">6 min read</span>
+  <a href="journal/color-theory-isnt-enough-emotional-architecture.html" class="article" data-cat="branding">
+    <div class="thumb">
+      <img src="assets/journal/color-theory-isnt-enough-emotional-architecture/cover.jpg" alt="Color theory isn&#39;t enough: emotional architecture" loading="lazy" decoding="async" sizes="(max-width: 640px) calc(100vw - 40px), (max-width: 1024px) 42vw, 34vw" />
+      <span class="cat-badge">Branding</span>
     </div>
-    <h3>Five typography choices that built category leaders</h3>
-    <div class="byline">
-      <div class="ava"><img src="" alt="Yuki Tanaka" /></div>
-      <span>Yuki Tanaka</span>
+    <div class="body">
+      <div class="row">
+        <span class="date">Feb 27, 2026</span>
+        <span class="rt">9 min read</span>
+      </div>
+      <h3>Color theory isn&#39;t enough: emotional architecture</h3>
+      <div class="author-row">
+        <div class="ava">MC</div>
+        <span class="an">Marcus Chen</span>
+      </div>
+    </div>
+  </a>
+  <a href="journal/founders-dont-need-agencies-they-need-systems.html" class="article" data-cat="founders">
+    <div class="thumb">
+      <img src="assets/journal/founders-dont-need-agencies-they-need-systems/cover.jpg" alt="Founders don&#39;t need agencies. They need systems." loading="lazy" decoding="async" sizes="(max-width: 640px) calc(100vw - 40px), (max-width: 1024px) 42vw, 34vw" />
+      <span class="cat-badge">Founders</span>
+    </div>
+    <div class="body">
+      <div class="row">
+        <span class="date">Feb 12, 2026</span>
+        <span class="rt">7 min read</span>
+      </div>
+      <h3>Founders don&#39;t need agencies. They need systems.</h3>
+      <div class="author-row">
+        <div class="ava">AD</div>
+        <span class="an">Amara Diallo</span>
+      </div>
+    </div>
+  </a>
+  <a href="journal/the-brief-that-changed-everything-on-client-collaboration.html" class="article" data-cat="process">
+    <div class="thumb">
+      <img src="assets/journal/the-brief-that-changed-everything-on-client-collaboration/cover.jpg" alt="The brief that changed everything: on client collaboration" loading="lazy" decoding="async" sizes="(max-width: 640px) calc(100vw - 40px), (max-width: 1024px) 42vw, 34vw" />
+      <span class="cat-badge">Process</span>
+    </div>
+    <div class="body">
+      <div class="row">
+        <span class="date">Dec 8, 2025</span>
+        <span class="rt">14 min read</span>
+      </div>
+      <h3>The brief that changed everything: on client collaboration</h3>
+      <div class="author-row">
+        <div class="ava">SA</div>
+        <span class="an">Sena Adusei</span>
+      </div>
+    </div>
+  </a>
+  <a href="journal/five-typography-choices-that-built-category-leaders.html" class="article" data-cat="culture">
+    <div class="thumb">
+      <img src="assets/journal/five-typography-choices-that-built-category-leaders/cover.jpg" alt="Five typography choices that built category leaders" loading="lazy" decoding="async" sizes="(max-width: 640px) calc(100vw - 40px), (max-width: 1024px) 42vw, 34vw" />
+      <span class="cat-badge">Culture</span>
+    </div>
+    <div class="body">
+      <div class="row">
+        <span class="date">Nov 19, 2025</span>
+        <span class="rt">6 min read</span>
+      </div>
+      <h3>Five typography choices that built category leaders</h3>
+      <div class="author-row">
+        <div class="ava">YT</div>
+        <span class="an">Yuki Tanaka</span>
+      </div>
     </div>
   </a>
   <!-- LUMIS:END journal-grid -->
 
+</div>
 </div>
 
 <!-- NEWSLETTER -->
@@ -717,6 +798,135 @@ document.querySelectorAll('.filter-bar .f').forEach(btn => {
 });
 
 updateCount('all');
+
+/* Journal rail — vertical scroll drives horizontal movement */
+(() => {
+  const section = document.getElementById('journalRailSection');
+  const rail = document.getElementById('journalRail');
+  if (!section || !rail) return;
+
+  const cards = Array.from(rail.querySelectorAll('.article'));
+  const clamp = (n, min, max) => Math.min(max, Math.max(min, n));
+  let maxScroll = 0;
+  let startY = 0;
+  let travelY = 1;
+  let ticking = false;
+  let manualHoldUntil = 0;
+  let dragStartX = 0;
+  let dragStartScroll = 0;
+  let dragging = false;
+  let didDrag = false;
+
+  function syncActive() {
+    if (!cards.length) return;
+    const center = rail.scrollLeft + rail.clientWidth / 2;
+    let closest = cards[0];
+    let closestDist = Infinity;
+    cards.forEach(card => {
+      const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+      const dist = Math.abs(center - cardCenter);
+      if (dist < closestDist) {
+        closest = card;
+        closestDist = dist;
+      }
+    });
+    rail.classList.add('has-active');
+    cards.forEach(card => card.classList.toggle('is-active', card === closest));
+  }
+
+  function measure() {
+    maxScroll = Math.max(0, rail.scrollWidth - rail.clientWidth);
+    const span = Math.max(maxScroll * 1.35, innerHeight * 0.95, 760);
+    section.style.setProperty('--rail-scroll-span', `${Math.ceil(span)}px`);
+
+    const sectionTop = scrollY + section.getBoundingClientRect().top;
+    startY = sectionTop - innerHeight * 0.58;
+    travelY = Math.max(1, section.offsetHeight - innerHeight * 0.34);
+    updateFromScroll(true);
+  }
+
+  function updateFromScroll(force = false) {
+    ticking = false;
+    if (!force && performance.now() < manualHoldUntil) return;
+    const progress = clamp((scrollY - startY) / travelY, 0, 1);
+    rail.scrollLeft = maxScroll * progress;
+    syncActive();
+  }
+
+  function requestUpdate() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => updateFromScroll());
+  }
+
+  function syncPageToRail() {
+    if (maxScroll <= 1) return;
+    const progress = clamp(rail.scrollLeft / maxScroll, 0, 1);
+    manualHoldUntil = performance.now() + 320;
+    scrollTo({ top: startY + travelY * progress, behavior: 'auto' });
+    syncActive();
+  }
+
+  if (reduced) {
+    syncActive();
+    return;
+  }
+
+  addEventListener('scroll', requestUpdate, { passive: true });
+  addEventListener('resize', () => requestAnimationFrame(measure), { passive: true });
+  addEventListener('load', measure, { once: true });
+
+  rail.addEventListener('scroll', syncActive, { passive: true });
+
+  rail.addEventListener('pointerdown', e => {
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    dragging = true;
+    didDrag = false;
+    dragStartX = e.clientX;
+    dragStartScroll = rail.scrollLeft;
+    manualHoldUntil = performance.now() + 1000;
+    rail.classList.add('dragging');
+    rail.setPointerCapture?.(e.pointerId);
+  });
+
+  rail.addEventListener('pointermove', e => {
+    if (!dragging) return;
+    const walk = e.clientX - dragStartX;
+    if (Math.abs(walk) > 5) didDrag = true;
+    rail.scrollLeft = dragStartScroll - walk;
+  });
+
+  const stopDrag = () => {
+    if (!dragging) return;
+    dragging = false;
+    rail.classList.remove('dragging');
+    syncPageToRail();
+  };
+  rail.addEventListener('pointerup', stopDrag);
+  rail.addEventListener('pointercancel', stopDrag);
+  rail.addEventListener('lostpointercapture', stopDrag);
+
+  rail.addEventListener('keydown', e => {
+    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) return;
+    e.preventDefault();
+    const gap = parseFloat(getComputedStyle(rail).columnGap || getComputedStyle(rail).gap) || 72;
+    const step = cards[0]?.offsetWidth ? cards[0].offsetWidth + gap : rail.clientWidth * 0.75;
+    if (e.key === 'ArrowLeft') rail.scrollLeft -= step;
+    if (e.key === 'ArrowRight') rail.scrollLeft += step;
+    if (e.key === 'Home') rail.scrollLeft = 0;
+    if (e.key === 'End') rail.scrollLeft = maxScroll;
+    syncPageToRail();
+  });
+
+  rail.addEventListener('click', e => {
+    if (didDrag) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+    }
+  }, true);
+
+  measure();
+})();
 </script>
 <script>
 /* signal-arrow cursor */

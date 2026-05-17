@@ -1,10 +1,14 @@
-{#- Renders one .person card for contact.html .meet-grid -#}
-{# Inputs: item.slug, item.meta {name, role, location, ex_roles}, item.image_url -#}
-<div class="person">
-  <div class="ph"><img src="{{ item.image_url }}" alt="{{ item.meta.name }}" /></div>
-  <div class="meta">
-    <div class="name">{{ item.meta.name.split(' ', 1)[0] }} <em>{{ item.meta.name.split(' ', 1)[1] if ' ' in item.meta.name else '' }}</em></div>
-    <div class="role">// {{ item.meta.role }}</div>
-    <div class="city">{{ item.meta.location }}{% if item.meta.ex_roles %} · {{ item.meta.ex_roles }}{% endif %}</div>
+{#- Editorial portrait item for vertical-scroll-driven team rail -#}
+{# Inputs: item.slug, item.meta {name, role, location, num}, item.image_url #}
+<div class="team-item" data-slug="{{ item.slug }}" role="button" tabindex="0" aria-label="Read {{ item.meta.name }}'s bio">
+  <div class="ti-photo">
+    <img src="{{ item.image_url }}" alt="{{ item.meta.name }}" loading="lazy" />
+  </div>
+  <div class="ti-info">
+    <div class="ti-num">{{ item.meta.num if item.meta.num else '' }}</div>
+    <div class="ti-name">{{ item.meta.name.split(' ', 1)[0] }} <em>{{ item.meta.name.split(' ', 1)[1] if ' ' in item.meta.name else '' }}</em></div>
+    <div class="ti-role">// {{ item.meta.role }}</div>
+    <div class="ti-loc">{{ item.meta.location }}</div>
+    <span class="ti-cta">Read bio &#x2192;</span>
   </div>
 </div>

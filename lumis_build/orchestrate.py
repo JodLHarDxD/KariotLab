@@ -37,7 +37,12 @@ def build_all(only_sections: Iterable[str] | None = None) -> None:
             dst = config.ASSETS_DIR / content_subdir / item["slug"] / f"{preset_name}.jpg"
             process_image(item["images"][0], dst, max_width=max_width, quality=quality)
             item["image_url"] = _image_url_for(item, content_subdir)
-        rendered = "\n".join(render_card(env, template_name, item) for item in items)
+        rendered_cards = []
+        for idx, item in enumerate(items):
+            if marker_name == "journal-grid":
+                item.setdefault("author_img_url", "")
+            rendered_cards.append(render_card(env, template_name, item))
+        rendered = "\n".join(rendered_cards)
         page_path = config.ROOT / page_file
         if not page_path.is_file():
             continue

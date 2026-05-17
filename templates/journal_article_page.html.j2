@@ -56,17 +56,16 @@
 
   .author-bar { display: flex; align-items: center; justify-content: space-between; margin-top: 56px; padding: 28px 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); flex-wrap: wrap; gap: 20px; }
   .author { display: flex; align-items: center; gap: 14px; }
-  .author .avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--ink-2); border: 1px solid var(--rule-2); overflow: hidden; }
-  .author .avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .author .avatar { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, rgba(255,77,46,0.18) 0%, rgba(201,164,103,0.12) 100%); border: 1px solid var(--rule-2); display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 13px; font-weight: 500; letter-spacing: 0.06em; color: var(--signal-soft); flex-shrink: 0; }
   .author .name { font-size: 14px; font-weight: 500; }
   .author .role { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.45; margin-top: 3px; }
   .back-link { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--paper); text-decoration: none; border: 1px solid var(--rule-2); padding: 8px 16px; border-radius: 999px; opacity: 0.65; transition: all 0.3s; }
   .back-link:hover { opacity: 1; border-color: var(--paper); }
 
   /* HERO IMAGE */
-  .hero-img { max-width: 1440px; margin: 56px auto 0; padding: 0 32px; }
+  .hero-img { max-width: 664px; margin: 56px auto 0; padding: 0 32px; }
   .hero-img figure { border-radius: 24px; overflow: hidden; border: 1px solid var(--rule); }
-  .hero-img figure img { width: 100%; aspect-ratio: 21/9; object-fit: cover; display: block; filter: saturate(0.8) brightness(0.9); }
+  .hero-img figure img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; filter: saturate(1.04) contrast(1.03) brightness(1); }
 
   /* ARTICLE BODY */
   .article-body { max-width: 1440px; margin: 0 auto; padding: 80px 32px 120px; display: grid; grid-template-columns: 1fr 680px 1fr; gap: 0 48px; }
@@ -125,7 +124,7 @@
   <h1>{{ item.meta.title }}</h1>
   <div class="author-bar">
     <div class="author">
-      <div class="avatar">{% if item.image_url %}<img src="../{{ item.image_url }}" alt="{{ item.meta.author }}" />{% endif %}</div>
+      <div class="avatar">{% set _p = item.meta.author.split() %}{{ _p[0][0] }}{{ _p[1][0] if _p|length > 1 else '' }}</div>
       <div>
         <div class="name">{{ item.meta.author }}</div>
         <div class="role">Lumis Studio</div>
@@ -138,7 +137,7 @@
 {% if item.image_url %}
 <div class="hero-img">
   <figure>
-    <img src="../{{ item.image_url }}" alt="{{ item.meta.title }}" />
+    <img src="../{{ item.image_url }}" alt="{{ item.meta.title }}" loading="eager" decoding="async" sizes="(max-width: 640px) calc(100vw - 40px), calc(100vw - 64px)" />
   </figure>
 </div>
 {% endif %}

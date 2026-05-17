@@ -52,7 +52,7 @@
   .btn-primary:hover { background: var(--signal); color: var(--paper); border-color: var(--signal); transform: translateY(-1px); }
   a, button, input, textarea, select, summary { touch-action: manipulation; }
   a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible, summary:focus-visible { outline: 2px solid var(--signal); outline-offset: 4px; }
-  .btn-primary, .pill, .submit button, .soc, .person { will-change: transform; }
+  .btn-primary, .pill, .submit button, .soc, .team-dot { will-change: transform; }
   .btn-primary:hover, .btn-primary:focus-visible { transform: translateY(-6px) scale(1.04); box-shadow: 0 32px 72px rgba(255,77,46,0.36), 0 10px 28px rgba(255,77,46,0.22); }
   @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(255,77,46,0.7), 0 0 12px var(--signal); } 70% { box-shadow: 0 0 0 12px rgba(255,77,46,0), 0 0 12px var(--signal); } }
 
@@ -143,22 +143,168 @@
   .form-card.sent form { display: none; }
   .form-card.sent .form-success { display: block; }
 
-  /* MEET STUDIO */
-  .meet { padding: 100px 32px; max-width: 1440px; margin: 0 auto; border-top: 1px solid var(--rule); }
-  .meet h3 { font-family: var(--serif); font-weight: 300; font-size: clamp(40px, 5vw, 80px); line-height: 1; letter-spacing: -0.03em; max-width: 720px; margin-bottom: 60px; }
-  .meet h3 em { font-style: italic; color: var(--signal); }
-  .meet-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
-  .person { background: var(--ink-2); border: 1px solid var(--rule); border-radius: 16px; overflow: hidden; transition: transform 0.4s, border-color 0.4s; }
-  .person:hover { transform: translateY(-6px); border-color: var(--rule-2); }
-  .person .ph { aspect-ratio: 4/5; overflow: hidden; }
-  .person .ph img { width: 100%; height: 100%; object-fit: cover; filter: saturate(0.85) brightness(0.92) grayscale(0.2); transition: filter 0.6s, transform 0.6s; }
-  .person:hover .ph img { filter: saturate(1) brightness(1) grayscale(0); transform: scale(1.04); }
-  .person .meta { padding: 24px; }
-  .person .name { font-family: var(--serif); font-weight: 400; font-size: 24px; letter-spacing: -0.015em; line-height: 1.1; }
-  .person .name em { font-style: italic; color: var(--signal-soft); }
-  .person .role { font-family: var(--mono); font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.6; margin-top: 6px; }
-  .person .city { font-family: var(--serif); font-style: italic; font-size: 14px; opacity: 0.55; margin-top: 12px; }
-  @media (max-width: 980px) { .meet-grid { grid-template-columns: 1fr 1fr; } .page { grid-template-columns: 1fr; } .nav ul { display: none; } .clocks { grid-template-columns: 1fr; } .field-row { grid-template-columns: 1fr; } }
+  /* TEAM SECTION — vertical scroll drives horizontal gallery */
+  .team-section { border-top: 1px solid var(--rule); overflow: hidden; }
+  .team-section-head { padding: 80px clamp(32px, 5vw, 96px) 48px; max-width: 1440px; margin: 0 auto; }
+  .team-section-head h3 { font-family: var(--serif); font-weight: 300; font-size: clamp(40px, 5vw, 80px); line-height: 1; letter-spacing: -0.03em; max-width: 720px; }
+  .team-section-head h3 em { font-style: italic; color: var(--signal); }
+  .team-section-head .ts-hint { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.3; margin-top: 20px; display: flex; align-items: center; gap: 12px; }
+  .team-section-head .ts-hint::before { content: ''; display: inline-block; width: 28px; height: 1px; background: currentColor; }
+
+  /* Outer scroll-span container */
+  .team-rail-outer {
+    --rail-pad: clamp(32px, 5vw, 96px);
+    --rail-scroll-span: 1400px;
+    min-height: calc(100vh + var(--rail-scroll-span));
+    position: relative;
+  }
+
+  /* Sticky wrap — holds rail + active-member context panel as one unit */
+  .team-sticky { position: sticky; top: clamp(88px, 10vh, 120px); z-index: 1; }
+
+  /* Rail — scroll-driven, no wheel hijack */
+  .team-rail {
+    display: flex; gap: clamp(96px, 12vw, 180px); overflow-x: auto; overflow-y: hidden;
+    scrollbar-width: none; -ms-overflow-style: none;
+    padding: 8px var(--rail-pad) 56px; cursor: grab; user-select: none;
+    scroll-snap-type: none;
+    scroll-behavior: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+  }
+  .team-rail::-webkit-scrollbar { display: none; }
+  .team-rail.dragging { cursor: grabbing; scroll-behavior: auto; }
+
+  /* Item — photo beside info, editorial 2-col grid */
+  .team-item {
+    flex: 0 0 clamp(560px, 54vw, 780px);
+    display: grid; grid-template-columns: minmax(240px, 0.86fr) minmax(200px, 0.64fr);
+    align-items: center; column-gap: clamp(48px, 6vw, 96px);
+    cursor: pointer; scroll-snap-align: start;
+    opacity: 0.82;
+    transition: transform 500ms cubic-bezier(0.22,1,0.36,1), opacity 500ms cubic-bezier(0.22,1,0.36,1);
+    will-change: transform, opacity;
+  }
+  .team-rail.has-active .team-item { opacity: 0.28; transform: scale(0.98); }
+  .team-rail.has-active .team-item.is-active { opacity: 1; transform: scale(1); }
+
+  /* Portrait */
+  .ti-photo { position: relative; overflow: hidden; aspect-ratio: 3/4; border: 1px solid var(--rule); background: var(--ink-2); }
+  .ti-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 10%; filter: saturate(0.78) brightness(0.88) grayscale(0.08); transition: transform 900ms cubic-bezier(0.22,1,0.36,1), filter 700ms; display: block; pointer-events: none; }
+  .team-item.is-active .ti-photo { border-color: rgba(255,184,159,0.42); }
+  .team-item.is-active .ti-photo img,
+  .team-item:hover .ti-photo img { transform: scale(1.03); filter: saturate(0.96) brightness(0.96) grayscale(0); }
+
+  /* Info column — sits in the gap breathing space */
+  .ti-info {
+    min-height: min(380px, 58vh);
+    padding: clamp(16px, 2.5vw, 32px) 0;
+    display: flex; flex-direction: column; justify-content: center;
+    position: relative;
+  }
+  .ti-info::before { content: ''; position: absolute; left: 0; top: 0; width: 1px; height: 100%; background: linear-gradient(180deg, transparent, rgba(242,235,218,0.2), transparent); }
+  .ti-num { font-family: var(--mono); font-size: 10px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--signal); padding-left: clamp(22px, 2.8vw, 40px); margin-bottom: 24px; }
+  .ti-name { font-family: var(--serif); font-weight: 300; font-size: clamp(30px, 3.2vw, 56px); line-height: 0.97; letter-spacing: -0.03em; padding-left: clamp(22px, 2.8vw, 40px); }
+  .ti-name em { font-style: italic; color: var(--signal-soft); }
+  .ti-role { font-family: var(--mono); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.4; margin-top: 10px; padding-left: clamp(22px, 2.8vw, 40px); }
+  .ti-loc { font-family: var(--serif); font-style: italic; font-size: 13px; opacity: 0.34; margin-top: 8px; padding-left: clamp(22px, 2.8vw, 40px); }
+  .ti-cta { margin-top: auto; padding-top: 36px; padding-left: clamp(22px, 2.8vw, 40px); font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--signal); display: inline-flex; align-items: center; gap: 8px; transition: gap 0.35s cubic-bezier(0.22,1,0.36,1), opacity 0.35s; opacity: 0; }
+  .team-item:hover .ti-cta,
+  .team-item.is-active .ti-cta { opacity: 1; }
+  .team-item:hover .ti-cta { gap: 14px; }
+
+  /* Bio side panel overlay */
+  .bio-overlay { position: fixed; inset: 0; z-index: 8000; pointer-events: none; }
+  .bio-overlay.open { pointer-events: all; }
+  .bio-backdrop { position: absolute; inset: 0; background: rgba(10,9,8,0.72); backdrop-filter: blur(6px); opacity: 0; transition: opacity 0.4s cubic-bezier(0.4,0,0.2,1); }
+  .bio-overlay.open .bio-backdrop { opacity: 1; }
+  .bio-panel { position: absolute; right: 0; top: 0; bottom: 0; width: min(580px, 92vw); background: var(--ink-2); border-left: 1px solid rgba(242,235,218,0.14); transform: translateX(100%); transition: transform 0.45s cubic-bezier(0.22,1,0.36,1); overflow-y: auto; display: flex; flex-direction: column; }
+  .bio-overlay.open .bio-panel { transform: translateX(0); }
+  .bio-close-row { display: flex; justify-content: flex-end; padding: 20px 20px 0; flex-shrink: 0; }
+  .bio-close { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background: none; border: 1px solid var(--rule); color: var(--paper); opacity: 0.55; font-size: 18px; line-height: 1; cursor: pointer; border-radius: 0; transition: border-color 0.2s, opacity 0.2s, color 0.2s; }
+  .bio-close:hover { border-color: var(--signal); opacity: 1; color: var(--signal); }
+  .bio-portrait { width: 100%; aspect-ratio: 4/3; object-fit: cover; object-position: center 12%; display: block; filter: saturate(0.85) brightness(0.88); flex-shrink: 0; }
+  .bio-inner { padding: 40px; flex: 1; }
+  .bio-inner .bnum { font-family: var(--mono); font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--signal); margin-bottom: 20px; }
+  .bio-inner .bname { font-family: var(--serif); font-weight: 300; font-size: clamp(32px, 5vw, 52px); line-height: 0.95; letter-spacing: -0.025em; margin-bottom: 8px; }
+  .bio-inner .bname em { font-style: italic; color: var(--signal-soft); }
+  .bio-inner .brole { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.38; margin-bottom: 32px; }
+  .bio-inner .bquote { font-family: var(--serif); font-style: italic; font-weight: 300; font-size: clamp(16px, 1.4vw, 20px); line-height: 1.45; color: var(--signal-soft); margin-bottom: 24px; padding-left: 18px; border-left: 2px solid rgba(255,77,46,0.4); }
+  .bio-inner .btext { font-family: var(--serif); font-weight: 300; font-size: 16px; line-height: 1.72; opacity: 0.7; margin-bottom: 32px; }
+  .bio-inner .btags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .bio-inner .btag { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--paper); opacity: 0.38; border: 1px solid var(--rule); padding: 5px 12px; border-radius: 0; }
+
+  /* Active-member context panel — sits below the sticky rail, fills empty viewport space */
+  .team-context {
+    margin-top: clamp(16px, 2vw, 36px);
+    padding: clamp(20px, 2.4vw, 36px) clamp(32px, 5vw, 96px) 0;
+    display: grid;
+    grid-template-columns: 0.85fr 1.55fr 0.85fr;
+    column-gap: clamp(28px, 4vw, 72px);
+    align-items: start;
+    border-top: 1px solid var(--rule);
+    opacity: 0; transform: translateY(8px);
+    transition: opacity 700ms cubic-bezier(0.22,1,0.36,1), transform 700ms cubic-bezier(0.22,1,0.36,1);
+    pointer-events: none;
+  }
+  .team-context.is-ready { opacity: 1; transform: translateY(0); pointer-events: auto; }
+  .tc-col { display: flex; flex-direction: column; gap: 10px; }
+  .tc-key { font-family: var(--mono); font-size: 9px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--signal); display: inline-flex; align-items: center; gap: 10px; }
+  .tc-key::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--signal); box-shadow: 0 0 12px rgba(255,77,46,0.6); animation: tc-pulse 2.4s ease-in-out infinite; }
+  @keyframes tc-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.45; } }
+  .tc-num { font-family: var(--mono); font-size: 10px; letter-spacing: 0.26em; text-transform: uppercase; opacity: 0.42; }
+  .tc-name { font-family: var(--serif); font-weight: 300; font-size: clamp(22px, 1.9vw, 32px); line-height: 1.05; letter-spacing: -0.018em; transition: opacity 360ms ease; }
+  .tc-name em { font-style: italic; color: var(--signal-soft); }
+  .tc-role { font-family: var(--mono); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.4; transition: opacity 360ms ease; }
+
+  .tc-quote-col { padding-top: 4px; }
+  .tc-quote {
+    font-family: var(--serif); font-weight: 300; font-style: italic;
+    font-size: clamp(20px, 1.95vw, 30px); line-height: 1.34; letter-spacing: -0.012em;
+    color: var(--paper); opacity: 0.92;
+    padding-left: 28px; border-left: 1px solid rgba(255,77,46,0.4);
+    max-width: 640px; margin: 0;
+    transition: opacity 360ms ease, transform 360ms ease;
+  }
+  .tc-quote-source { font-family: var(--mono); font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; opacity: 0.35; margin-top: 18px; padding-left: 28px; }
+
+  .tc-tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+  .tc-tag { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.5; padding: 5px 11px; border: 1px solid var(--rule); transition: opacity 360ms ease, border-color 220ms ease, color 220ms ease; }
+  .tc-tag:hover { opacity: 0.85; border-color: rgba(255,77,46,0.45); color: var(--signal-soft); }
+  .tc-readmore {
+    margin-top: 18px; align-self: flex-start;
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--signal); cursor: pointer; background: none; border: none; padding: 0;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: gap 0.32s cubic-bezier(0.22,1,0.36,1);
+  }
+  .tc-readmore:hover { gap: 14px; }
+
+  /* Smooth swap when active member changes */
+  .team-context.swap .tc-name,
+  .team-context.swap .tc-role,
+  .team-context.swap .tc-quote,
+  .team-context.swap .tc-tag { opacity: 0; }
+  .team-context.swap .tc-quote { transform: translateX(6px); }
+
+  @media (max-width: 980px) {
+    .team-section-head { padding-left: 20px; padding-right: 20px; }
+    .team-rail-outer { --rail-pad: 20px; }
+    .team-rail { gap: 64px; }
+    .team-item { flex: 0 0 clamp(300px, 82vw, 480px); grid-template-columns: 1fr; row-gap: 28px; }
+    .ti-info { min-height: auto; }
+    .ti-info::before { display: none; }
+    .team-sticky { position: relative; top: auto; }
+    .team-context { display: none; }
+    .page { grid-template-columns: 1fr; } .nav ul { display: none; } .clocks { grid-template-columns: 1fr; } .field-row { grid-template-columns: 1fr; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .team-rail-outer { min-height: auto; padding-bottom: 80px; }
+    .team-sticky { position: relative; top: auto; }
+    .team-rail { scroll-snap-type: x mandatory; }
+    .team-context { display: none; }
+  }
 
   /* SOCIAL LINKS */
   .socials { margin-top: 32px; }
@@ -355,45 +501,109 @@
   </div>
 </section>
 
-<section class="meet" data-cursor-surface="dark">
-  <h3>The <em>three principals</em>,<br/>one engineer, the room.</h3>
-  <div class="meet-grid">
-    <!-- LUMIS:BEGIN team-grid -->
-    <div class="person">
-      <div class="ph"><img src="assets/members/mara-castellan/portrait.jpg" alt="Mara Castellán" /></div>
-      <div class="meta">
-        <div class="name">Mara <em>Castellán</em></div>
-        <div class="role">// Principal · Strategy</div>
-        <div class="city">Lisbon · ex-Wolff Olins, ex-Mother</div>
+<section class="team-section" id="teamRailSection" data-cursor-surface="dark">
+  <div class="team-section-head">
+    <h3>The <em>three principals</em>,<br/>one engineer, the room.</h3>
+    <p class="ts-hint">Scroll to explore · click to read</p>
+  </div>
+  <div class="team-rail-outer">
+   <div class="team-sticky">
+    <div class="team-rail" id="teamRail">
+      <!-- LUMIS:BEGIN team-grid -->
+
+      <div class="team-item" data-slug="mara-castellan" role="button" tabindex="0" aria-label="Read Mara Castellán's bio">
+        <div class="ti-photo">
+          <img src="assets/members/mara-castellan/portrait.jpg" alt="Mara Castellán" loading="lazy" />
+        </div>
+        <div class="ti-info">
+          <div class="ti-num">01 / 04</div>
+          <div class="ti-name">Mara <em>Castellán</em></div>
+          <div class="ti-role">// Principal · Strategy</div>
+          <div class="ti-loc">Lisbon</div>
+          <span class="ti-cta">Read bio →</span>
+        </div>
       </div>
-    </div>
-    <div class="person">
-      <div class="ph"><img src="assets/members/aiko-tanaka/portrait.jpg" alt="Aiko Tanaka" /></div>
-      <div class="meta">
-        <div class="name">Aiko <em>Tanaka</em></div>
-        <div class="role">// Principal · Identity</div>
-        <div class="city">Tokyo · ex-Pentagram, ex-Stockholm Design Lab</div>
+
+      <div class="team-item" data-slug="aiko-tanaka" role="button" tabindex="0" aria-label="Read Aiko Tanaka's bio">
+        <div class="ti-photo">
+          <img src="assets/members/aiko-tanaka/portrait.jpg" alt="Aiko Tanaka" loading="lazy" />
+        </div>
+        <div class="ti-info">
+          <div class="ti-num">02 / 04</div>
+          <div class="ti-name">Aiko <em>Tanaka</em></div>
+          <div class="ti-role">// Principal · Identity</div>
+          <div class="ti-loc">Tokyo</div>
+          <span class="ti-cta">Read bio →</span>
+        </div>
       </div>
-    </div>
-    <div class="person">
-      <div class="ph"><img src="assets/members/eli-okafor/portrait.jpg" alt="Eli Okafor" /></div>
-      <div class="meta">
-        <div class="name">Eli <em>Okafor</em></div>
-        <div class="role">// Principal · Voice</div>
-        <div class="city">New York · ex-Collins, ex-Order</div>
+
+      <div class="team-item" data-slug="eli-okafor" role="button" tabindex="0" aria-label="Read Eli Okafor's bio">
+        <div class="ti-photo">
+          <img src="assets/members/eli-okafor/portrait.jpg" alt="Eli Okafor" loading="lazy" />
+        </div>
+        <div class="ti-info">
+          <div class="ti-num">03 / 04</div>
+          <div class="ti-name">Eli <em>Okafor</em></div>
+          <div class="ti-role">// Principal · Voice</div>
+          <div class="ti-loc">New York</div>
+          <span class="ti-cta">Read bio →</span>
+        </div>
       </div>
-    </div>
-    <div class="person">
-      <div class="ph"><img src="assets/members/theo-halasz/portrait.jpg" alt="Theo Halász" /></div>
-      <div class="meta">
-        <div class="name">Theo <em>Halász</em></div>
-        <div class="role">// Lead Engineer · Lumis</div>
-        <div class="city">Berlin · ex-Anthropic, ex-Vercel</div>
+
+      <div class="team-item" data-slug="theo-halasz" role="button" tabindex="0" aria-label="Read Theo Halász's bio">
+        <div class="ti-photo">
+          <img src="assets/members/theo-halasz/portrait.jpg" alt="Theo Halász" loading="lazy" />
+        </div>
+        <div class="ti-info">
+          <div class="ti-num">04 / 04</div>
+          <div class="ti-name">Theo <em>Halász</em></div>
+          <div class="ti-role">// Lead Engineer · Lumis</div>
+          <div class="ti-loc">Berlin</div>
+          <span class="ti-cta">Read bio →</span>
+        </div>
       </div>
+
+      <!-- LUMIS:END team-grid -->
     </div>
-    <!-- LUMIS:END team-grid -->
+
+    <!-- Active-member context panel — fills viewport space below the sticky rail -->
+    <aside class="team-context" id="teamContext" aria-live="polite">
+      <div class="tc-col tc-meta">
+        <span class="tc-key">Now reading</span>
+        <span class="tc-num" id="tcNum">01 / 04</span>
+        <span class="tc-name" id="tcName">Mara <em>Castellán</em></span>
+        <span class="tc-role" id="tcRole">Ex-Wolff Olins · Ex-Mother · Lisbon</span>
+      </div>
+      <div class="tc-col tc-quote-col">
+        <blockquote class="tc-quote" id="tcQuote">A brand that cannot be summarized in a sentence hasn't been thought through.</blockquote>
+        <div class="tc-quote-source" id="tcQuoteSource">— On Lumis methodology</div>
+      </div>
+      <div class="tc-col tc-tags-col">
+        <span class="tc-key">Working in</span>
+        <div class="tc-tag-row" id="tcTagRow">
+          <span class="tc-tag">Positioning</span>
+          <span class="tc-tag">Naming Architecture</span>
+          <span class="tc-tag">Brand Voice Strategy</span>
+          <span class="tc-tag">Stakeholder Alignment</span>
+        </div>
+        <button type="button" class="tc-readmore" id="tcReadMore">Read full bio →</button>
+      </div>
+    </aside>
+   </div>
   </div>
 </section>
+
+<!-- Bio side-panel overlay (shared, outside section so it overlays everything) -->
+<div class="bio-overlay" id="bioOverlay" role="dialog" aria-modal="true" aria-label="Team member profile" hidden>
+  <div class="bio-backdrop" id="bioBackdrop"></div>
+  <div class="bio-panel" id="bioPanel">
+    <div class="bio-close-row">
+      <button class="bio-close" id="bioClose" aria-label="Close profile">×</button>
+    </div>
+    <img class="bio-portrait" id="bioPic" src="" alt="" />
+    <div class="bio-inner" id="bioInner"></div>
+  </div>
+</div>
 
 <section class="cta-strip" data-cursor-surface="dark">
   <h2>Or just <em>start now</em>.<br/>14 days, no card.</h2>
@@ -427,7 +637,7 @@ const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   let mx = innerWidth/2, my = innerHeight/2, rx = mx, ry = my, sx = mx, sy = my;
   addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; dot.style.transform = `translate(${mx}px,${my}px) translate(-50%,-50%)`; });
   (function loop() { rx += (mx-rx)*0.18; ry += (my-ry)*0.18; sx += (mx-sx)*0.08; sy += (my-sy)*0.08; ring.style.transform = `translate(${rx}px,${ry}px) translate(-50%,-50%)`; if (sp) sp.style.transform = `translate(${sx}px,${sy}px) translate(-50%,-50%)`; requestAnimationFrame(loop); })();
-  const targets = 'a, button, input, textarea, select, summary, [role="button"], .btn-primary, .btn-ghost, .cta-tier, .tier, .case, .feature, .principle, .person, .soc, .pill, .faq, .compare-table tbody tr, .palette .sw, .surf, .article, .filter-bar .f, .toggle button, .form-card';
+  const targets = 'a, button, input, textarea, select, summary, [role="button"], .btn-primary, .btn-ghost, .cta-tier, .tier, .case, .feature, .principle, .team-dot, .soc, .pill, .faq, .compare-table tbody tr, .palette .sw, .surf, .article, .filter-bar .f, .toggle button, .form-card';
   let hd = 0;
   const setHov = on => { ring.classList.toggle('hover', on); dot.classList.toggle('hover', on); };
   document.querySelectorAll(targets).forEach(el => {
@@ -508,9 +718,225 @@ gsap.from('.studio-meta', { opacity: 0, y: 30, duration: 1.2, ease: 'expo.out', 
 gsap.from('.clocks .clock', { opacity: 0, y: 30, duration: 1, stagger: 0.1, ease: 'expo.out', delay: 0.7 });
 gsap.from('.form-card', { opacity: 0, y: 50, scale: 0.98, duration: 1.4, ease: 'expo.out', delay: 0.3, clearProps: 'transform' });
 
-gsap.utils.toArray('.person, .meet h3, .cta-strip h2').forEach(el => {
+gsap.utils.toArray('.cta-strip h2').forEach(el => {
   gsap.fromTo(el, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 1.1, ease: 'expo.out', clearProps: 'transform', scrollTrigger: { trigger: el, start: 'top 85%' } });
 });
+
+/* Team rail — vertical scroll drives horizontal movement + bio panel */
+(function () {
+  const BIOS = {
+    'mara-castellan': {
+      num: '01 / 04', first: 'Mara', last: 'Castellán',
+      role: '// Ex-Wolff Olins · Ex-Mother · Lisbon',
+      quote: '“A brand that cannot be summarized in a sentence hasn’t been thought through.”',
+      text: 'Before Lumis, Mara led positioning strategy at Wolff Olins across projects spanning luxury, fintech, and civic institutions—then took that rigor to Mother, where she ran accounts for challenger consumer brands through identity inflection points. She founded Lumis’s methodology: the belief that great brand strategy is not about differentiation alone, but about making your actual truth legible at every touchpoint. Her weekly office hours are legendary for turning a founder’s scattered ninety-minute monologue into a single, devastating sentence.',
+      tags: ['Positioning', 'Naming Architecture', 'Brand Voice Strategy', 'Stakeholder Alignment'],
+      img: 'assets/members/mara-castellan/portrait.jpg',
+    },
+    'aiko-tanaka': {
+      num: '02 / 04', first: 'Aiko', last: 'Tanaka',
+      role: '// Ex-Pentagram · Ex-Stockholm Design Lab · Tokyo',
+      quote: '“Every mark begins as a cultural argument. What are you claiming about the world?”',
+      text: 'Aiko spent six years at Pentagram Tokyo before a residency at Stockholm Design Lab reshaped how she approaches the tension between brand expression and system architecture. At Lumis, she leads all visual identity work—mark, type, color, motion—with a philosophy borrowed from Japanese craft traditions: obsess over the invisible detail that makes the whole feel inevitable. She is responsible for the 120+ primitive library at the core of the Studio plan.',
+      tags: ['Visual Identity Systems', 'Type Direction', 'Motion Language', 'Color Theory'],
+      img: 'assets/members/aiko-tanaka/portrait.jpg',
+    },
+    'eli-okafor': {
+      num: '03 / 04', first: 'Eli', last: 'Okafor',
+      role: '// Ex-Collins · Ex-Order · New York',
+      quote: '“If your brand sounds like everyone else’s brand, the logo doesn’t matter.”',
+      text: 'At Collins, Eli developed verbal identity systems for clients ranging from Fortune 50 rebrands to early-stage startups setting their first tone. At Order, he refined an approach to naming and narrative that treats language as infrastructure—not decoration. At Lumis, he runs the voice layer: tone specifications, naming frameworks, copy architecture, and the rhetorical decisions that make a brand’s language instantly recognizable even without a logo.',
+      tags: ['Verbal Identity', 'Naming', 'Tone Architecture', 'Editorial Direction'],
+      img: 'assets/members/eli-okafor/portrait.jpg',
+    },
+    'theo-halasz': {
+      num: '04 / 04', first: 'Theo', last: 'Halász',
+      role: '// Ex-Anthropic · Ex-Vercel · Berlin',
+      quote: '“A design system that can’t ship is just a PDF.”',
+      text: 'Theo was part of the core team at Anthropic building developer tooling before moving to Vercel, where he worked on the infrastructure that serves billions of frontend requests. At Lumis, he owns the code layer: translating visual identity and design systems into Figma tokens, CSS variables, React component libraries, and the technical specifications that actually land in production. He is the reason Lumis systems arrive as working code—not just as design files.',
+      tags: ['Design Tokens', 'Component Architecture', 'CSS Systems', 'Figma Engineering'],
+      img: 'assets/members/theo-halasz/portrait.jpg',
+    },
+  };
+
+  /* ── Scroll-driven rail (same engine as journal page) ── */
+  const section = document.getElementById('teamRailSection');
+  const rail    = document.getElementById('teamRail');
+  let didDrag   = false;
+
+  if (section && rail) {
+    const items   = Array.from(rail.querySelectorAll('.team-item'));
+    const clamp   = (n, lo, hi) => Math.min(hi, Math.max(lo, n));
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let maxScroll = 0, startY = 0, travelY = 1, ticking = false, manualHoldUntil = 0;
+    let dragging = false, dragStartX = 0, dragStartScroll = 0;
+
+    /* Active-member context panel refs */
+    const ctx       = document.getElementById('teamContext');
+    const ctxNum    = document.getElementById('tcNum');
+    const ctxName   = document.getElementById('tcName');
+    const ctxRole   = document.getElementById('tcRole');
+    const ctxQuote  = document.getElementById('tcQuote');
+    const ctxSource = document.getElementById('tcQuoteSource');
+    const ctxTagRow = document.getElementById('tcTagRow');
+    const ctxRead   = document.getElementById('tcReadMore');
+    let lastSlug = null, swapTimer = null;
+
+    function setContext(slug) {
+      if (!ctx || !BIOS[slug] || slug === lastSlug) return;
+      lastSlug = slug;
+      const b = BIOS[slug];
+      const apply = () => {
+        if (ctxNum)    ctxNum.textContent    = b.num;
+        if (ctxName)   ctxName.innerHTML     = `${b.first} <em>${b.last}</em>`;
+        if (ctxRole)   ctxRole.textContent   = b.role.replace(/^\/\/\s*/, '');
+        if (ctxQuote)  ctxQuote.textContent  = b.quote.replace(/^[“"]+|[”"]+$/g, '');
+        if (ctxSource) ctxSource.textContent = `— ${b.first} ${b.last}`;
+        if (ctxTagRow) ctxTagRow.innerHTML   = b.tags.map(t => `<span class="tc-tag">${t}</span>`).join('');
+        if (ctxRead)   ctxRead.dataset.slug  = slug;
+        ctx.classList.remove('swap');
+        ctx.classList.add('is-ready');
+      };
+      if (ctx.classList.contains('is-ready')) {
+        ctx.classList.add('swap');
+        clearTimeout(swapTimer);
+        swapTimer = setTimeout(apply, 200);
+      } else {
+        apply();
+      }
+    }
+
+    function syncActive() {
+      if (!items.length) return;
+      const center = rail.scrollLeft + rail.clientWidth / 2;
+      let closest = items[0], closestDist = Infinity;
+      items.forEach(item => {
+        const ic = item.offsetLeft + item.offsetWidth / 2;
+        const d  = Math.abs(center - ic);
+        if (d < closestDist) { closest = item; closestDist = d; }
+      });
+      rail.classList.add('has-active');
+      items.forEach(item => item.classList.toggle('is-active', item === closest));
+      if (closest && closest.dataset.slug) setContext(closest.dataset.slug);
+    }
+
+    if (ctxRead) {
+      ctxRead.addEventListener('click', () => {
+        const slug = ctxRead.dataset.slug || lastSlug;
+        if (!slug || typeof window.openBio !== 'function') return;
+        window.openBio(slug);
+      });
+    }
+
+    function measure() {
+      maxScroll = Math.max(0, rail.scrollWidth - rail.clientWidth);
+      const span = Math.max(maxScroll * 1.35, innerHeight * 0.95, 800);
+      section.style.setProperty('--rail-scroll-span', Math.ceil(span) + 'px');
+      const sectionTop = scrollY + section.getBoundingClientRect().top;
+      startY  = sectionTop - innerHeight * 0.55;
+      travelY = Math.max(1, section.offsetHeight - innerHeight * 0.32);
+      updateFromScroll(true);
+    }
+
+    function updateFromScroll(force) {
+      ticking = false;
+      if (!force && performance.now() < manualHoldUntil) return;
+      const progress = clamp((scrollY - startY) / travelY, 0, 1);
+      rail.scrollLeft = maxScroll * progress;
+      syncActive();
+    }
+
+    function requestUpdate() {
+      if (ticking) return; ticking = true;
+      requestAnimationFrame(() => updateFromScroll(false));
+    }
+
+    function syncPageToRail() {
+      if (maxScroll <= 1) return;
+      const progress = clamp(rail.scrollLeft / maxScroll, 0, 1);
+      manualHoldUntil = performance.now() + 320;
+      scrollTo({ top: startY + travelY * progress, behavior: 'auto' });
+      syncActive();
+    }
+
+    if (reduced) { syncActive(); }
+    else {
+      addEventListener('scroll', requestUpdate, { passive: true });
+      addEventListener('resize', () => requestAnimationFrame(measure), { passive: true });
+      addEventListener('load', measure, { once: true });
+      rail.addEventListener('scroll', syncActive, { passive: true });
+
+      rail.addEventListener('pointerdown', e => {
+        if (e.pointerType === 'mouse' && e.button !== 0) return;
+        dragging = true; didDrag = false;
+        dragStartX = e.clientX; dragStartScroll = rail.scrollLeft;
+        rail.setPointerCapture(e.pointerId);
+        rail.classList.add('dragging');
+      });
+      rail.addEventListener('pointermove', e => {
+        if (!dragging) return;
+        const dx = dragStartX - e.clientX;
+        if (Math.abs(dx) > 4) didDrag = true;
+        rail.scrollLeft = dragStartScroll + dx;
+      });
+      rail.addEventListener('pointerup', () => {
+        if (!dragging) return;
+        dragging = false; rail.classList.remove('dragging');
+        syncPageToRail();
+      });
+      rail.addEventListener('pointercancel', () => {
+        dragging = false; rail.classList.remove('dragging');
+      });
+
+      requestAnimationFrame(measure);
+    }
+  }
+
+  /* ── Bio panel ── */
+  const overlay  = document.getElementById('bioOverlay');
+  const backdrop = document.getElementById('bioBackdrop');
+  const closeBtn = document.getElementById('bioClose');
+  const bioPic   = document.getElementById('bioPic');
+  const bioInner = document.getElementById('bioInner');
+
+  function openBio(slug) {
+    const d = BIOS[slug]; if (!d || !overlay) return;
+    bioPic.src = d.img; bioPic.alt = d.first + ' ' + d.last;
+    bioInner.innerHTML =
+      '<div class="bnum">' + d.num + '</div>' +
+      '<div class="bname">' + d.first + ' <em>' + d.last + '</em></div>' +
+      '<div class="brole">' + d.role + '</div>' +
+      '<blockquote class="bquote">' + d.quote + '</blockquote>' +
+      '<p class="btext">' + d.text + '</p>' +
+      '<div class="btags">' + d.tags.map(t => '<span class="btag">' + t + '</span>').join('') + '</div>';
+    if (rail) {
+      rail.classList.add('has-active');
+      rail.querySelectorAll('.team-item').forEach(c => c.classList.toggle('is-active', c.dataset.slug === slug));
+    }
+    overlay.hidden = false;
+    requestAnimationFrame(() => requestAnimationFrame(() => overlay.classList.add('open')));
+    document.body.style.overflow = 'hidden';
+  }
+  window.openBio = openBio;
+
+  function closeBio() {
+    if (!overlay) return;
+    overlay.classList.remove('open');
+    if (rail) {
+      rail.classList.remove('has-active');
+      rail.querySelectorAll('.team-item.is-active').forEach(c => c.classList.remove('is-active'));
+    }
+    overlay.addEventListener('transitionend', () => { overlay.hidden = true; document.body.style.overflow = ''; }, { once: true });
+  }
+
+  document.querySelectorAll('.team-item').forEach(item => {
+    item.addEventListener('click',   () => { if (didDrag) { didDrag = false; return; } openBio(item.dataset.slug); });
+    item.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openBio(item.dataset.slug); } });
+  });
+  if (backdrop) backdrop.addEventListener('click', closeBio);
+  if (closeBtn) closeBtn.addEventListener('click', closeBio);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && overlay && !overlay.hidden) closeBio(); });
+})();
 </script>
 <script>
 /* signal-arrow cursor */
@@ -528,7 +954,7 @@ gsap.utils.toArray('.person, .meet h3, .cta-strip h2').forEach(el => {
   addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
   (function loop() { cx += (mx-cx)*.22; cy += (my-cy)*.22; cc.style.transform = `translate(${cx.toFixed(1)}px,${cy.toFixed(1)}px)`; requestAnimationFrame(loop); })();
   let hd = 0;
-  document.querySelectorAll('a,button,input,textarea,select,summary,[role=button],.btn-primary,.btn-ghost,.cta-tier,.tier,.case,.feature,.principle,.person,.soc,.pill,.faq,.article,.form-card').forEach(el => {
+  document.querySelectorAll('a,button,input,textarea,select,summary,[role=button],.btn-primary,.btn-ghost,.cta-tier,.tier,.case,.feature,.principle,.team-dot,.soc,.pill,.faq,.article,.form-card').forEach(el => {
     el.addEventListener('mouseenter', () => { if (++hd===1) cc.classList.add('hover'); });
     el.addEventListener('mouseleave', () => { if (!--hd) cc.classList.remove('hover'); });
   });

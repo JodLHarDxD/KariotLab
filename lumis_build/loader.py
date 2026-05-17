@@ -22,8 +22,8 @@ def load_section(section_dir: Path) -> list[dict[str, Any]]:
         body_path = slug_dir / "body.md"
         body_html = _md.render(body_path.read_text(encoding="utf-8")) if body_path.is_file() else ""
         images = sorted(
-            p for p in slug_dir.iterdir()
-            if p.is_file() and p.suffix.lower() in _IMAGE_EXTS
+            (p for p in slug_dir.iterdir() if p.is_file() and p.suffix.lower() in _IMAGE_EXTS),
+            key=lambda p: (p.name.lower() != "cover.jpg", p.name.lower()),
         )
         items.append({
             "slug": slug_dir.name,

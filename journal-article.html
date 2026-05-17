@@ -106,7 +106,7 @@
   }
   .article-header .author-bar .author { display: flex; align-items: center; gap: 16px; }
   .article-header .author-bar .avatar { width: 48px; height: 48px; border-radius: 50%; overflow: hidden; border: 1px solid var(--rule-2); }
-  .article-header .author-bar .avatar img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(0.3); }
+  .article-header .author-bar .avatar img { width: 100%; height: 100%; object-fit: cover; }
   .article-header .author-bar .info .name { font-size: 15px; font-weight: 500; }
   .article-header .author-bar .info .role { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.5; margin-top: 3px; }
   .article-header .author-bar .share { display: flex; gap: 12px; }
@@ -127,10 +127,10 @@
   }
   .hero-img figure img {
     width: 100%; aspect-ratio: 21/9; object-fit: cover;
-    display: block; filter: saturate(0.8) brightness(0.9);
-    transition: filter 1s; transform: scale(1.02);
+    display: block; filter: saturate(1.04) contrast(1.03) brightness(1);
+    transition: filter 1s;
   }
-  .hero-img figure:hover img { filter: saturate(1) brightness(0.95); }
+  .hero-img figure:hover img { filter: saturate(1.08) contrast(1.04) brightness(1.02); }
   .hero-img figcaption {
     font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em;
     text-transform: uppercase; opacity: 0.4; margin-top: 16px; padding: 0 4px;
@@ -210,7 +210,7 @@
 
   /* Inline figure */
   .inline-figure { margin: 56px 0; }
-  .inline-figure img { width: 100%; border-radius: 16px; border: 1px solid var(--rule); display: block; filter: saturate(0.8) brightness(0.9); }
+  .inline-figure img { width: 100%; border-radius: 16px; border: 1px solid var(--rule); display: block; filter: saturate(1.04) contrast(1.03) brightness(1); }
   .inline-figure figcaption { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.4; margin-top: 14px; }
 
   /* Tag list */
@@ -231,7 +231,7 @@
     padding: 48px; display: flex; gap: 32px; align-items: flex-start;
   }
   .author-card .avatar { width: 72px; height: 72px; border-radius: 50%; overflow: hidden; border: 1px solid var(--rule-2); flex-shrink: 0; }
-  .author-card .avatar img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(0.3); }
+  .author-card .avatar img { width: 100%; height: 100%; object-fit: cover; }
   .author-card .info .label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); display: block; margin-bottom: 10px; }
   .author-card .info .name { font-family: var(--serif); font-weight: 400; font-size: 28px; letter-spacing: -0.02em; }
   .author-card .info .role { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.5; margin-top: 4px; }
@@ -251,8 +251,8 @@
   .more-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
   .more-card { text-decoration: none; color: inherit; cursor: pointer; }
   .more-card .thumb { border-radius: 16px; overflow: hidden; border: 1px solid var(--rule); position: relative; aspect-ratio: 4/3; background: var(--ink-2); }
-  .more-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.7s cubic-bezier(0.22,1,0.36,1), filter 0.6s; filter: saturate(0.75) brightness(0.88); }
-  .more-card:hover .thumb img { transform: scale(1.05); filter: saturate(1) brightness(0.95); }
+  .more-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.7s cubic-bezier(0.22,1,0.36,1), filter 0.6s; filter: saturate(1.04) contrast(1.03) brightness(1); }
+  .more-card:hover .thumb img { transform: scale(1.025); filter: saturate(1.08) contrast(1.04) brightness(1.02); }
   .more-card .thumb .cat-badge { position: absolute; top: 14px; left: 14px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--paper); background: rgba(10,9,8,0.65); backdrop-filter: blur(6px); padding: 5px 12px; border-radius: 999px; border: 1px solid var(--rule-2); }
   .more-card .body { padding: 20px 4px 0; }
   .more-card .body .date { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.4; margin-bottom: 10px; display: block; }
@@ -366,7 +366,7 @@
   <p class="lede">Static marks served the era of billboards and business cards. In a world of motion, memory, and machine-generated surfaces, brand systems have become the new competitive moat.</p>
   <div class="author-bar">
     <div class="author">
-      <div class="avatar"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80" alt="Marcus Chen" /></div>
+      <div class="avatar"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=240&q=92" alt="Marcus Chen" /></div>
       <div class="info">
         <div class="name">Marcus Chen</div>
         <div class="role">Creative Director, Lumis</div>
@@ -382,7 +382,7 @@
 <!-- HERO IMAGE -->
 <div class="hero-img">
   <figure id="hero-fig">
-    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1400&q=85" alt="Brand systems in the age of motion" loading="eager" />
+    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=2200&q=95" alt="Brand systems in the age of motion" loading="eager" decoding="async" />
   </figure>
   <figcaption>Graphic: Lumis Studio · A system in motion replaces the static mark</figcaption>
 </div>
@@ -440,7 +440,7 @@
     <p>In 2026, that surface count is effectively infinite. A brand now lives in push notifications, AI-generated customer service threads, motion backgrounds on video calls, programmatic display ads rendered at 600 different dimensions, open graph images auto-generated from metadata, app icons at 29 × 29 pixels, AR filters, embedded widgets, email footers, Slack workspace icons, and GitHub profile pages. No single static mark survives all of these contexts coherently.</p>
 
     <figure class="inline-figure">
-      <img src="https://images.unsplash.com/photo-1541462608143-67571c6738dd?w=1200&q=80" alt="Multiple brand touchpoints across digital surfaces" loading="lazy" />
+      <img src="https://images.unsplash.com/photo-1541462608143-67571c6738dd?w=1600&q=95" alt="Multiple brand touchpoints across digital surfaces" loading="lazy" decoding="async" />
       <figcaption>The modern brand surface landscape — from pixel-perfect to ambient</figcaption>
     </figure>
 
@@ -522,7 +522,7 @@
 <div class="author-card-section">
   <div class="spacer"></div>
   <div class="author-card reveal">
-    <div class="avatar"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&q=80" alt="Marcus Chen" /></div>
+    <div class="avatar"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=240&q=92" alt="Marcus Chen" /></div>
     <div class="info">
       <span class="label">// Author</span>
       <div class="name">Marcus Chen</div>
@@ -542,7 +542,7 @@
   <div class="more-grid">
     <a href="journal-article.html" class="more-card">
       <div class="thumb">
-        <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=700&q=80" alt="YC brands" loading="lazy" />
+        <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=1100&q=92" alt="YC brands" loading="lazy" decoding="async" />
         <span class="cat-badge">Founders</span>
       </div>
       <div class="body">
@@ -552,7 +552,7 @@
     </a>
     <a href="journal-article.html" class="more-card">
       <div class="thumb">
-        <img src="https://images.unsplash.com/photo-1524678606370-a47ad25cb82a?w=700&q=80" alt="Italics" loading="lazy" />
+        <img src="https://images.unsplash.com/photo-1524678606370-a47ad25cb82a?w=1100&q=92" alt="Italics" loading="lazy" decoding="async" />
         <span class="cat-badge">Culture</span>
       </div>
       <div class="body">
@@ -562,7 +562,7 @@
     </a>
     <a href="journal-article.html" class="more-card">
       <div class="thumb">
-        <img src="https://images.unsplash.com/photo-1493612276216-ee3925520721?w=700&q=80" alt="Emotional architecture" loading="lazy" />
+        <img src="https://images.unsplash.com/photo-1493612276216-ee3925520721?w=1100&q=92" alt="Emotional architecture" loading="lazy" decoding="async" />
         <span class="cat-badge">Branding</span>
       </div>
       <div class="body">
