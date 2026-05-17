@@ -11,7 +11,7 @@
   /* ── Styles ─────────────────────────────────────────────── */
   var s = document.createElement('style');
   s.textContent = [
-    '#kl-pre{position:fixed;inset:0;z-index:99999;background:#0F0F0F;',
+    '#kl-pre{position:fixed;inset:0;z-index:99999;background:#0A0908;',
     'display:flex;flex-direction:column;align-items:center;justify-content:center;',
     'user-select:none;pointer-events:none;}',
 
@@ -24,9 +24,9 @@
 
     /* Base layer — dim grey */
     '.kl-k-dim{font-family:"Playfair Display",Georgia,serif;',
-    'font-style:italic;font-weight:900;color:#252525;}',
+    'font-style:italic;font-weight:900;color:#221E18;}',
     '.kl-l-dim{font-family:"Inter",-apple-system,sans-serif;',
-    'font-weight:900;color:#252525;}',
+    'font-weight:900;color:#221E18;}',
 
     /* Fill overlay — clips from the top; reveals bottom-up */
     '#kl-fill{position:absolute;inset:0;clip-path:inset(100% 0 0 0);}',
@@ -43,9 +43,9 @@
 
     /* Filled text */
     '.kl-k-fill{font-family:"Playfair Display",Georgia,serif;',
-    'font-style:italic;font-weight:900;color:#ffffff;}',
+    'font-style:italic;font-weight:900;color:#F2EBDA;}',
     '.kl-l-fill{font-family:"Inter",-apple-system,sans-serif;',
-    'font-weight:900;color:#f97316;}',
+    'font-weight:900;color:#FF4D2E;}',
 
     /* Bottom-right metadata footer */
     '#kl-meta{position:absolute;bottom:2.5rem;right:2.5rem;',
@@ -63,7 +63,7 @@
     'color:rgba(255,255,255,0.4);}',
 
     '#kl-pct,#kl-pct-sym{font-family:"JetBrains Mono",monospace;',
-    'font-size:14px;font-weight:700;color:#f97316;}',
+    'font-size:14px;font-weight:700;color:#FF4D2E;}',
     '#kl-pct{min-width:3ch;text-align:right;}',
 
     /* Exit — fade out (matches AnimatePresence exit in source) */
