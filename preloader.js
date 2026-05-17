@@ -1,5 +1,17 @@
-/* KariotLAB — preloader. Liquid fill with wave surface. Runs on every page load. */
+/* KariotLAB — preloader. Liquid fill with wave surface. First visit + reloads only. */
 (function () {
+  /* Show on: first visit (no sessionStorage flag) OR explicit reload (F5/Ctrl+R).
+     Skip on: internal page navigation (clicking links between pages). */
+  var navType = '';
+  if (performance.getEntriesByType) {
+    var nav = performance.getEntriesByType('navigation')[0];
+    navType = nav ? nav.type : '';
+  } else if (performance.navigation) {
+    navType = performance.navigation.type === 1 ? 'reload' : 'navigate';
+  }
+  var isReload     = navType === 'reload';
+  var isFirstVisit = !sessionStorage.getItem('kl_loaded');
+  if (!isReload && !isFirstVisit) return;
 
   /* Playfair Display italic 900 — not loaded by site pages */
   var lnk = document.createElement('link');
@@ -141,7 +153,7 @@
       setTimeout(function () {
         el.classList.add('exit');
         document.body.style.overflow = '';
-        /* sessionStorage guard removed — fires on every page load */
+        sessionStorage.setItem('kl_loaded', '1');
         setTimeout(function () { el.remove(); s.remove(); lnk.remove(); }, 850);
       }, 800);
     }
