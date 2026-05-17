@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Background -->
+  <rect width="32" height="32" rx="6" fill="#0A0908"/>
+  <!-- K — Inter 800, cream -->
+  <text x="16" y="23" text-anchor="middle"
+        font-family="Inter, -apple-system, sans-serif"
+        font-weight="800" font-size="22"
+        fill="#F2EBDA">K</text>
+  <!-- Signal red underline bar -->
+  <rect x="7" y="27" width="18" height="2.5" rx="1.25" fill="#FF4D2E"/>
+</svg>

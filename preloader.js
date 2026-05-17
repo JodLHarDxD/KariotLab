@@ -1,6 +1,5 @@
-/* KariotLAB — preloader. Liquid fill with wave surface. Once per session. */
+/* KariotLAB — preloader. Liquid fill with wave surface. Runs on every page load. */
 (function () {
-  if (sessionStorage.getItem('kl_loaded')) return;
 
   /* Playfair Display italic 900 — not loaded by site pages */
   var lnk = document.createElement('link');
@@ -142,7 +141,7 @@
       setTimeout(function () {
         el.classList.add('exit');
         document.body.style.overflow = '';
-        sessionStorage.setItem('kl_loaded', '1');
+        /* sessionStorage guard removed — fires on every page load */
         setTimeout(function () { el.remove(); s.remove(); lnk.remove(); }, 850);
       }, 800);
     }
