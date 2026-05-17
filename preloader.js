@@ -1,7 +1,6 @@
-/* KariotLAB — preloader. Liquid fill with wave surface. First visit + reloads only. */
+/* KariotLAB — preloader. Liquid fill + aurora. First visit + reload only. */
 (function () {
-  /* Show on: first visit (no sessionStorage flag) OR explicit reload (F5/Ctrl+R).
-     Skip on: internal page navigation (clicking links between pages). */
+  /* Show on: first visit OR explicit reload. Skip: internal navigation. */
   var navType = '';
   if (performance.getEntriesByType) {
     var nav = performance.getEntriesByType('navigation')[0];
@@ -9,157 +8,211 @@
   } else if (performance.navigation) {
     navType = performance.navigation.type === 1 ? 'reload' : 'navigate';
   }
-  var isReload     = navType === 'reload';
-  var isFirstVisit = !sessionStorage.getItem('kl_loaded');
-  if (!isReload && !isFirstVisit) return;
+  if (navType !== 'reload' && sessionStorage.getItem('kl_loaded')) return;
 
-  /* Playfair Display italic 900 — not loaded by site pages */
+  /* ── Font ───────────────────────────────────────────────── */
   var lnk = document.createElement('link');
   lnk.rel = 'stylesheet';
   lnk.href = 'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,900&display=swap';
   document.head.appendChild(lnk);
 
-  /* ── Styles ─────────────────────────────────────────────── */
+  /* ── Styles ──────────────────────────────────────────────── */
   var s = document.createElement('style');
   s.textContent = [
+    /* Fade in on mount */
+    '@keyframes kl-enter{from{opacity:0;}to{opacity:1;}}',
+
+    /* Aurora drift */
+    '@keyframes kl-drift{from{transform:translate(0,0)scale(1);}',
+    'to{transform:translate(28px,18px)scale(1.1);}}',
+
+    /* Three wave scroll loops at different speeds */
+    '@keyframes kl-w1{from{transform:translateX(-50%);}to{transform:translateX(0);}}',
+    '@keyframes kl-w2{from{transform:translateX(0);}to{transform:translateX(-50%);}}',
+    '@keyframes kl-w3{from{transform:translateX(-50%);}to{transform:translateX(0);}}',
+
+    /* Respect reduced motion */
+    '@media(prefers-reduced-motion:reduce){',
+    '#kl-aurora,#kl-wave-inner *{animation:none!important;}}',
+
+    /* ── Overlay ── */
     '#kl-pre{position:fixed;inset:0;z-index:99999;background:#0A0908;',
     'display:flex;flex-direction:column;align-items:center;justify-content:center;',
-    'user-select:none;pointer-events:none;}',
+    'overflow:hidden;user-select:none;pointer-events:none;',
+    'animation:kl-enter 0.4s ease-out both;}',
 
-    /* Word wrapper — base + fill layer stacked */
-    '#kl-words{position:relative;}',
+    /* ── Aurora ── */
+    '#kl-aurora{position:absolute;inset:0;overflow:hidden;pointer-events:none;}',
+    '.kl-glow{position:absolute;border-radius:50%;filter:blur(100px);}',
+    '#kl-g1{width:680px;height:680px;top:-20%;left:-15%;',
+    'background:rgba(255,77,46,0.15);',
+    'animation:kl-drift 9s ease-in-out infinite alternate;}',
+    '#kl-g2{width:540px;height:540px;bottom:-25%;right:-8%;',
+    'background:rgba(255,77,46,0.10);',
+    'animation:kl-drift 12s ease-in-out infinite alternate-reverse;}',
+    '#kl-g3{width:380px;height:380px;top:38%;left:52%;',
+    'background:rgba(242,235,218,0.05);',
+    'animation:kl-drift 7s ease-in-out infinite alternate;}',
+
+    /* ── Wordmark block ── */
+    '#kl-wm{position:relative;}',
 
     /* Shared text style */
-    '.kl-text{font-size:clamp(56px,12vw,160px);line-height:1;',
+    '.kl-t{font-size:clamp(56px,12vw,160px);line-height:1;',
     'letter-spacing:-0.05em;text-transform:uppercase;white-space:nowrap;}',
 
-    /* Base layer — dim grey */
-    '.kl-k-dim{font-family:"Playfair Display",Georgia,serif;',
+    /* Dim base layer */
+    '.kl-kd{font-family:"Playfair Display",Georgia,serif;',
     'font-style:italic;font-weight:900;color:#221E18;}',
-    '.kl-l-dim{font-family:"Inter",-apple-system,sans-serif;',
+    '.kl-ld{font-family:"Inter",-apple-system,sans-serif;',
     'font-weight:900;color:#221E18;}',
 
-    /* Fill overlay — clips from the top; reveals bottom-up */
-    '#kl-fill{position:absolute;inset:0;clip-path:inset(100% 0 0 0);}',
-
-    /* Wave surface container — JS drives top */
-    '#kl-wave-wrap{position:absolute;left:0;width:100%;}',
-
-    /* Wave SVG: 200% wide, scrolls left→right for seamless loop */
-    '#kl-wave-svg{position:absolute;left:0;top:-30px;',
-    'width:200%;height:60px;',
-    'fill:white;opacity:0.3;',
-    'animation:kl-wv 3s linear infinite;}',
-    '@keyframes kl-wv{from{transform:translateX(-50%);}to{transform:translateX(0%);}}',
+    /* Fill layer — clip-path rises from bottom, JS driven */
+    '#kl-fill{position:absolute;inset:0;',
+    'clip-path:inset(100% 0 0 0);}',
 
     /* Filled text */
-    '.kl-k-fill{font-family:"Playfair Display",Georgia,serif;',
+    '.kl-kf{font-family:"Playfair Display",Georgia,serif;',
     'font-style:italic;font-weight:900;color:#F2EBDA;}',
-    '.kl-l-fill{font-family:"Inter",-apple-system,sans-serif;',
+    '.kl-lf{font-family:"Inter",-apple-system,sans-serif;',
     'font-weight:900;color:#FF4D2E;}',
 
-    /* Bottom-right metadata footer */
-    '#kl-meta{position:absolute;bottom:2.5rem;right:2.5rem;',
-    'display:flex;flex-direction:column;align-items:flex-end;gap:0.4rem;}',
+    /* Wave container — fixed at BOTTOM of wordmark (does not move) */
+    '#kl-wave{position:absolute;bottom:0;left:-6%;width:112%;',
+    'height:72px;overflow:hidden;pointer-events:none;}',
 
-    '.kl-node{font-family:"JetBrains Mono",monospace;',
+    /* Three wave SVGs — each 200% wide, animated left-to-right */
+    '#kl-wave-inner{position:relative;width:100%;height:100%;}',
+    '.kl-ws{position:absolute;bottom:0;left:0;',
+    'width:200%;height:72px;}',
+
+    '.kl-w1{fill:rgba(242,235,218,0.20);',
+    'animation:kl-w1 4.2s linear infinite;}',
+    '.kl-w2{fill:rgba(242,235,218,0.13);',
+    'animation:kl-w2 5.8s linear infinite;}',
+    '.kl-w3{fill:rgba(255,77,46,0.11);',
+    'animation:kl-w3 3s linear infinite;}',
+
+    /* Progress track — inline just below wordmark */
+    '#kl-track{width:100%;height:1px;',
+    'background:rgba(242,235,218,0.07);',
+    'margin-top:clamp(16px,2.4vw,26px);',
+    'border-radius:1px;overflow:hidden;}',
+    '#kl-bar{height:100%;width:0%;background:#FF4D2E;}',
+
+    /* Counter row */
+    '#kl-ctr{margin-top:10px;display:flex;align-items:baseline;gap:0.5rem;}',
+    '#kl-lbl{font-family:"JetBrains Mono",monospace;',
     'font-size:10px;letter-spacing:0.28em;text-transform:uppercase;',
-    'color:rgba(255,255,255,0.2);}',
-
-    '#kl-sync-row{display:flex;align-items:baseline;gap:1rem;',
-    'border-left:1px solid rgba(255,255,255,0.1);padding-left:1.75rem;margin-top:0.2rem;}',
-
-    '#kl-sync-label{font-family:"JetBrains Mono",monospace;',
-    'font-size:10px;letter-spacing:0.28em;text-transform:uppercase;',
-    'color:rgba(255,255,255,0.4);}',
-
-    '#kl-pct,#kl-pct-sym{font-family:"JetBrains Mono",monospace;',
-    'font-size:14px;font-weight:700;color:#FF4D2E;}',
+    'color:rgba(242,235,218,0.28);}',
+    '#kl-pct,#kl-sym{font-family:"JetBrains Mono",monospace;',
+    'font-size:12px;font-weight:700;color:#FF4D2E;}',
     '#kl-pct{min-width:3ch;text-align:right;}',
 
-    /* Exit — fade out (matches AnimatePresence exit in source) */
-    '#kl-pre.exit{transition:opacity 0.8s ease;opacity:0;}',
+    /* Exit — ease-in (use for exits per UX guidelines) + zoom into site */
+    '#kl-pre.exit{',
+    'transition:opacity 0.65s cubic-bezier(0.4,0,1,1),',
+    'transform 0.65s cubic-bezier(0.4,0,1,1);',
+    'opacity:0;transform:scale(1.04);}',
   ].join('');
   document.head.appendChild(s);
 
+  /* ── Wave paths — large amplitude for dramatic fluid look ─ */
+  /* viewBox 0 0 900 72. Wave centres at y=40, amplitude ±24px */
+  var p1 = 'M0,40 C56,16 112,64 168,40 C224,16 280,64 337,40' +
+           ' C393,16 449,64 506,40 C562,16 618,64 675,40' +
+           ' C731,16 787,64 843,40 C900,16 900,64 900,40' +
+           ' L900,72 L0,72 Z';
+  /* Offset phase, gentler slope */
+  var p2 = 'M0,34 C75,14 150,54 225,34 C300,14 375,54 450,34' +
+           ' C525,14 600,54 675,34 C750,14 825,54 900,34' +
+           ' L900,72 L0,72 Z';
+  /* Fast, low amplitude accent wave */
+  var p3 = 'M0,54 C112,44 225,64 337,54 C450,44 562,64 675,54' +
+           ' C787,44 900,64 900,54 L900,72 L0,72 Z';
+
+  function mkSVG(cls, path) {
+    return '<svg class="kl-ws" viewBox="0 0 900 72" preserveAspectRatio="none">' +
+           '<path class="' + cls + '" d="' + path + '"/></svg>';
+  }
+
   /* ── DOM ─────────────────────────────────────────────────── */
   var el = document.createElement('div');
-  el.id = 'kl-pre';
+  el.id  = 'kl-pre';
   el.innerHTML =
-    '<div id="kl-words">' +
-      /* Dim base layer */
-      '<div class="kl-text">' +
-        '<span class="kl-k-dim">Kariot</span>' +
-        '<span class="kl-l-dim">LAB</span>' +
+    '<div id="kl-aurora">' +
+      '<div class="kl-glow" id="kl-g1"></div>' +
+      '<div class="kl-glow" id="kl-g2"></div>' +
+      '<div class="kl-glow" id="kl-g3"></div>' +
+    '</div>' +
+    '<div id="kl-wm">' +
+      '<div class="kl-t">' +
+        '<span class="kl-kd">Kariot</span><span class="kl-ld">LAB</span>' +
       '</div>' +
-      /* Liquid fill overlay */
       '<div id="kl-fill">' +
-        '<div id="kl-wave-wrap">' +
-          '<svg id="kl-wave-svg" viewBox="0 0 500 100" preserveAspectRatio="none">' +
-            '<path d="M0,50 C150,100 350,0 500,50 L500,100 L0,100 Z"/>' +
-          '</svg>' +
+        '<div class="kl-t">' +
+          '<span class="kl-kf">Kariot</span><span class="kl-lf">LAB</span>' +
         '</div>' +
-        '<div class="kl-text">' +
-          '<span class="kl-k-fill">Kariot</span>' +
-          '<span class="kl-l-fill">LAB</span>' +
+        /* Wave fixed at bottom — stays put, fill rises above it */
+        '<div id="kl-wave">' +
+          '<div id="kl-wave-inner">' +
+            mkSVG('kl-w1', p1) +
+            mkSVG('kl-w2', p2) +
+            mkSVG('kl-w3', p3) +
+          '</div>' +
         '</div>' +
       '</div>' +
     '</div>' +
-    /* Metadata footer */
-    '<div id="kl-meta">' +
-      '<div class="kl-node">Entry Node: SS-207</div>' +
-      '<div class="kl-node">Exit Node: SS-216</div>' +
-      '<div id="kl-sync-row">' +
-        '<span id="kl-sync-label">Syncing Stream…</span>' +
-        '<span id="kl-pct">0</span>' +
-        '<span id="kl-pct-sym">%</span>' +
-      '</div>' +
+    /* Progress track + counter — just below brand name */
+    '<div id="kl-track"><div id="kl-bar"></div></div>' +
+    '<div id="kl-ctr">' +
+      '<span id="kl-lbl">Syncing…</span>' +
+      '<span id="kl-pct">0</span>' +
+      '<span id="kl-sym">%</span>' +
     '</div>';
+
   document.body.appendChild(el);
   document.body.style.overflow = 'hidden';
 
-  /* ── Spring animation ────────────────────────────────────── */
-  var fillEl   = document.getElementById('kl-fill');
-  var waveWrap = document.getElementById('kl-wave-wrap');
-  var pctEl    = document.getElementById('kl-pct');
+  var fillEl = document.getElementById('kl-fill');
+  var barEl  = document.getElementById('kl-bar');
+  var pctEl  = document.getElementById('kl-pct');
+  var target = 0, current = 0;
 
-  var target  = 0;   /* stochastic counter target */
-  var current = 0;   /* spring-smoothed display value */
-
-  /* Stochastic counter — ~5s average to reach 100 (matches React source) */
+  /* Stochastic counter — ~5s average to 100 (matches original React source) */
   var iv = setInterval(function () {
     if (target >= 100) { clearInterval(iv); return; }
     target += Math.random() * 2;
     if (target > 100) target = 100;
   }, 50);
 
+  /* Spring physics RAF loop — current chases target with damping */
   function tick() {
-    /* Spring: current chases target with damping */
     current += (target - current) * 0.07;
-    var pct = Math.min(current, 100);
-    var top = Math.max(0, 100 - pct);
+    var pct    = Math.min(current, 100);
+    var clipTop = Math.max(0, 100 - pct);
 
-    fillEl.style.clipPath  = 'inset(' + top.toFixed(2) + '% 0 0 0)';
-    waveWrap.style.top     = top.toFixed(2) + '%';
-    pctEl.textContent      = Math.round(pct);
+    fillEl.style.clipPath = 'inset(' + clipTop.toFixed(2) + '% 0 0 0)';
+    barEl.style.width     = pct.toFixed(1) + '%';
+    pctEl.textContent     = Math.round(pct);
 
     if (pct < 99.9) {
       requestAnimationFrame(tick);
     } else {
-      /* Snap complete */
       fillEl.style.clipPath = 'inset(0% 0 0 0)';
-      waveWrap.style.top    = '0%';
+      barEl.style.width     = '100%';
       pctEl.textContent     = '100';
+      /* Hold briefly, then zoom-fade into site */
       setTimeout(function () {
         el.classList.add('exit');
         document.body.style.overflow = '';
         sessionStorage.setItem('kl_loaded', '1');
-        setTimeout(function () { el.remove(); s.remove(); lnk.remove(); }, 850);
-      }, 800);
+        setTimeout(function () { el.remove(); s.remove(); lnk.remove(); }, 700);
+      }, 500);
     }
   }
 
-  /* Start after fonts are ready (or 2.5s safety timeout) */
+  /* Start after fonts ready (2.5s safety timeout) */
   var started = false;
   function start() {
     if (started) return;
